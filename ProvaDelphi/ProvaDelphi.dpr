@@ -1,0 +1,20 @@
+program ProvaDelphi;
+
+uses
+  Forms,
+  uFMenuPrincipal in 'uFMenuPrincipal.pas' {fMenuPrincipal},
+  uFTarefa2 in 'uFTarefa2.pas' {FTarefa2},
+  uFigura in 'uFigura.pas',
+  uFila in 'uFila.pas',
+  uFTarefa1 in 'uFTarefa1.pas' {FTarefa1},
+  uThread in 'uThread.pas',
+  uFTarefa8 in 'uFTarefa8.pas' {FTarefa8},
+  UFTarefa6 in 'UFTarefa6.pas' {FTarefa6};
+
+{$R *.RES}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TfMenuPrincipal, fMenuPrincipal);
+  Application.Run;
+end.

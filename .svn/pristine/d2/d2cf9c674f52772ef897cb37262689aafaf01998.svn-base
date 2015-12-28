@@ -1,0 +1,71 @@
+unit unIncluirUsuario;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unCadastros, FMTBcd, SqlExpr, DB, Provider, DBClient, StdCtrls,
+  Buttons, ExtCtrls, unFuncoes, Grids, DBGrids;
+
+type
+  TfrmIncluirUsuario = class(TfrmCadastros)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    edtcodigo: TEdit;
+    edtNome: TEdit;
+    edtUsuario: TEdit;
+    edtSenha: TEdit;
+  private
+
+
+  public
+    procedure incluir; override;
+    procedure alterar; override;
+  end;
+
+var
+  frmIncluirUsuario: TfrmIncluirUsuario;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmIncluirUsuario }
+
+procedure TfrmIncluirUsuario.alterar;
+begin
+  inherited;
+
+  with qryPadrao, SQL do
+    begin
+      Close;
+      Clear;
+      Add('UPDATE usuarios SET nome=:nome,usu=:usu,sen=:sen');
+      Add('WHERE codigo = :cod');
+      ParamByName('cod').AsInteger := StrToInt(edtcodigo.Text); 
+      ParamByName('nome').AsString := edtNome.Text;
+      ParamByName('usu').AsString  := edtUsuario.Text;
+      ParamByName('sen').AsString  := edtSenha.Text;
+      ExecSQL();
+    end;
+end;
+
+procedure TfrmIncluirUsuario.incluir;
+begin
+  inherited;
+  with qryPadrao, SQL do
+    begin
+      Close;
+      Clear;
+      Add('INSERT INTO USUARIOS (nome,usuario,senha)');
+      Add('VALUES (:nome,:usu,:sen)');
+      ParamByName('nome').AsString := edtNome.Text;
+      ParamByName('usu').AsString  := edtUsuario.Text;
+      ParamByName('sen').AsString  := edtSenha.Text;
+      ExecSQL();
+    end;
+end;
+
+end.

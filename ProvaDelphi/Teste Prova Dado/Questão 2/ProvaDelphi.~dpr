@@ -1,0 +1,12 @@
+program ProvaDelphi;
+
+uses
+  Forms,
+  uFigura in 'uFigura.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.Run;
+end.

@@ -1,0 +1,5 @@
+Coloque no displaymask esta máscara => ,0.00 e o campo na proriedade
+DataFormula coloque o campo multiplicado por 1, lembre-se apartir do momento
+que você está usando uma operação matemática deveras colocar um
+ExpressionParser no aplicativo só basta um para que o RlReport possa
+enxergá-lo.

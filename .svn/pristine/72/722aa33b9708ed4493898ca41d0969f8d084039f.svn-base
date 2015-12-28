@@ -1,0 +1,157 @@
+inherited frmIncluirCondicaoPgto: TfrmIncluirCondicaoPgto
+  Caption = 'MANUTEN'#199#195'O DE CONDI'#199#213'ES DE PGTO'
+  ClientHeight = 222
+  ClientWidth = 537
+  OldCreateOrder = True
+  PixelsPerInch = 120
+  TextHeight = 16
+  inherited PnTitulo: TPanel
+    Width = 537
+  end
+  inherited PnDados: TPanel
+    Width = 537
+    Height = 112
+    object Label1: TLabel
+      Left = 10
+      Top = 10
+      Width = 44
+      Height = 16
+      Caption = 'C'#243'digo'
+    end
+    object Label2: TLabel
+      Left = 79
+      Top = 10
+      Width = 62
+      Height = 16
+      Caption = 'Descri'#231#227'o'
+    end
+    object Label3: TLabel
+      Left = 433
+      Top = 10
+      Width = 81
+      Height = 16
+      Caption = 'Qtd. Parcelas'
+    end
+    object Label4: TLabel
+      Left = 10
+      Top = 53
+      Width = 134
+      Height = 16
+      Caption = 'Dias Entre Presta'#231#245'es'
+    end
+    object Label5: TLabel
+      Left = 158
+      Top = 53
+      Width = 128
+      Height = 16
+      Caption = 'Dias p/ primeiro Vcto.'
+    end
+    object edtCodigo: TEdit
+      Left = 10
+      Top = 30
+      Width = 60
+      Height = 19
+      CharCase = ecUpperCase
+      Color = clMoneyGreen
+      Ctl3D = False
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 0
+      Text = 'EDTCODIGO'
+    end
+    object edtDescricao: TEdit
+      Left = 79
+      Top = 30
+      Width = 346
+      Height = 22
+      CharCase = ecUpperCase
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 1
+      Text = 'EDTDESCRICAO'
+    end
+    object edtQtdParcelas: TEdit
+      Left = 433
+      Top = 30
+      Width = 90
+      Height = 22
+      CharCase = ecUpperCase
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 2
+      Text = 'EDTQTDPARCELAS'
+    end
+    object edtDiasEntrePrestacoes: TEdit
+      Left = 10
+      Top = 73
+      Width = 139
+      Height = 22
+      CharCase = ecUpperCase
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 3
+      Text = 'EDTDIASENTREPRESTACOES'
+    end
+    object edtDias1Vcto: TEdit
+      Left = 158
+      Top = 73
+      Width = 148
+      Height = 22
+      CharCase = ecUpperCase
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 4
+      Text = 'EDTDIAS1VCTO'
+    end
+    object ChBxAvista: TCheckBox
+      Left = 315
+      Top = 73
+      Width = 119
+      Height = 21
+      Caption = #193' Vista'
+      TabOrder = 5
+    end
+  end
+  inherited PnAcoes: TPanel
+    Top = 161
+    Width = 537
+    inherited BtnGravar: TBitBtn
+      Left = 143
+      Top = 10
+    end
+    inherited BtnCancelar: TBitBtn
+      Left = 271
+      Top = 10
+    end
+  end
+  inherited cdsAux: TClientDataSet
+    Top = 57
+  end
+  inherited cdsPadrao: TClientDataSet
+    Top = 89
+  end
+  inherited dspAux: TDataSetProvider
+    Top = 57
+  end
+  inherited dspPadrao: TDataSetProvider
+    Top = 89
+  end
+  inherited dsAux: TDataSource
+    Top = 57
+  end
+  inherited dsPadrao: TDataSource
+    Top = 89
+  end
+  inherited qryAux: TSQLQuery
+    Top = 57
+  end
+  inherited qryPadrao: TSQLQuery
+    Top = 89
+  end
+end

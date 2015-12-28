@@ -1,0 +1,170 @@
+unit unConsultaAtendentes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, FMTBcd, Provider,
+  DBClient, DB, SqlExpr;
+
+type
+  TfrmConsultaAtendentes = class(TForm)
+    PnConsulta: TPanel;
+    PnOpcoes: TPanel;
+    PnDados: TPanel;
+    Label1: TLabel;
+    RdBtnID: TRadioButton;
+    RdBtnLogin: TRadioButton;
+    Bevel1: TBevel;
+    Label2: TLabel;
+    edtConsulta: TEdit;
+    BtnConsultar: TBitBtn;
+    GrdAtendentes: TDBGrid;
+    BtnIncluir: TBitBtn;
+    BtnAlterar: TBitBtn;
+    BtnExcluir: TBitBtn;
+    BtnSair: TBitBtn;
+    qryAtendentes: TSQLQuery;
+    dsAtendentes: TDataSource;
+    cdsAtendentes: TClientDataSet;
+    dspAtendentes: TDataSetProvider;
+    BtnSelecionar: TBitBtn;
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BtnConsultarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure BtnSelecionarClick(Sender: TObject);
+  private
+    procedure mostraAtendentes;
+    procedure AlimentaCampos;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frmConsultaAtendentes: TfrmConsultaAtendentes;
+
+implementation
+
+uses unDM, unCadastroLivros, unCadastroAtendentes, unCadastroEmprestimos;
+
+{$R *.dfm}
+
+procedure TfrmConsultaAtendentes.BtnSairClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmConsultaAtendentes.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TfrmConsultaAtendentes.mostraAtendentes;
+begin
+  try
+    qryAtendentes.Close;
+    qryAtendentes.SQL.Clear;
+    qryAtendentes.SQL.Add('SELECT * FROM atendente');
+
+    if (RdBtnID.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryAtendentes.SQL.Add('WHERE id_atendente = :id');
+
+    if (RdBtnLogin.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryAtendentes.SQL.Add('WHERE login LIKE :log');
+
+    if (RdBtnID.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryAtendentes.ParamByName('id').AsInteger := StrToInt(edtConsulta.Text);
+
+    if (RdBtnLogin.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryAtendentes.ParamByName('log').AsString := '%' + edtConsulta.Text + '%';
+
+    qryAtendentes.Open;
+    cdsAtendentes.Close;
+    cdsAtendentes.Open;
+  except
+    MessageDlg('Erro ao mostrar os atendentes!',mtError,[mbOk],0);
+  end;
+end;
+
+procedure TfrmConsultaAtendentes.BtnConsultarClick(Sender: TObject);
+begin
+  mostraAtendentes;
+end;
+
+procedure TfrmConsultaAtendentes.FormShow(Sender: TObject);
+begin
+  mostraAtendentes;
+end;
+
+procedure TfrmConsultaAtendentes.BtnIncluirClick(Sender: TObject);
+begin
+  try
+    edtConsulta.Clear;
+    frmCadastroAtendentes := TfrmCadastroAtendentes.Create(self);
+    frmCadastroAtendentes.iOperacao := 1; // Inclusão
+    frmCadastroAtendentes.ShowModal;
+  finally
+    FreeAndNil(frmCadastroAtendentes);
+    mostraAtendentes;
+  end;
+end;
+
+procedure TfrmConsultaAtendentes.BtnAlterarClick(Sender: TObject);
+begin
+  try
+    edtConsulta.Clear;
+    frmCadastroAtendentes := TfrmCadastroAtendentes.Create(self);
+    AlimentaCampos;
+    frmCadastroAtendentes.iOperacao := 2; // Alteração
+    frmCadastroAtendentes.ShowModal;
+  finally
+    FreeAndNil(frmCadastroAtendentes);
+    mostraAtendentes;
+  end;
+end;
+
+procedure TfrmConsultaAtendentes.AlimentaCampos;
+begin
+  frmCadastroAtendentes.edtIDAtendente.Text := cdsAtendentes.FieldByName('id_atendente').AsString;
+  frmCadastroAtendentes.edtLogin.Text  := cdsAtendentes.FieldByName('login').AsString;
+  frmCadastroAtendentes.edtSenha.Text:= cdsAtendentes.FieldByName('senha').AsString;
+end;
+
+procedure TfrmConsultaAtendentes.BtnExcluirClick(Sender: TObject);
+begin
+  if (MessageDlg('Deseja realmente excluir o atendente '+ cdsAtendentes.FieldByName('login').AsString+'?',mtConfirmation,[mbYes,mbNo],0)=mrYes) then
+    begin
+      try
+        qryAtendentes.Close;
+        qryAtendentes.SQL.Clear;
+        qryAtendentes.SQL.Add('DELETE FROM atendente');
+        qryAtendentes.SQL.Add('WHERE id_atendente = :id');
+        qryAtendentes.ParamByName('id').AsInteger := cdsAtendentes.FieldByName('id_atendente').AsInteger;
+        qryAtendentes.ExecSQL();
+      except
+        MessageDlg('Não é possível excluir o atendente. O mesmo já deve ter vinculo em algum empréstimo!',mtError,[mbOk],0);
+      end;
+    end;
+
+  mostraAtendentes;
+end;
+
+procedure TfrmConsultaAtendentes.BtnSelecionarClick(Sender: TObject);
+begin
+  if cdsAtendentes.RecordCount > 0 then
+    begin
+      frmCadastroEmprestimos.edtCodAtendente.Text := cdsAtendentes.FieldByName('id_atendente').AsString;
+      frmCadastroEmprestimos.lblAtendente.Caption := cdsAtendentes.FieldByName('login').AsString;
+      Self.Close;
+    end;
+end;
+
+end.

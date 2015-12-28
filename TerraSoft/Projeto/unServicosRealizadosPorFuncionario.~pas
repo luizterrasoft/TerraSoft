@@ -1,0 +1,181 @@
+unit unServicosRealizadosPorFuncionario;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, Mask, unFuncoes, FMTBcd, SqlExpr,
+  Provider, DB, DBClient;
+
+type
+  TfrmServicosRealizadosPorFuncionario = class(TForm)
+    Pndados: TPanel;
+    PnBotoes: TPanel;
+    Label1: TLabel;
+    edtCodFuncionario: TEdit;
+    BtnBuscaFuncionario: TBitBtn;
+    lblFuncionario: TLabel;
+    Label2: TLabel;
+    mskInicial: TMaskEdit;
+    Label3: TLabel;
+    mskFinal: TMaskEdit;
+    Label4: TLabel;
+    CbxStatus: TComboBox;
+    BtnGerar: TBitBtn;
+    BtnSair: TBitBtn;
+    dsRel: TDataSource;
+    cdsRel: TClientDataSet;
+    dspRel: TDataSetProvider;
+    qryRel: TSQLQuery;
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodFuncionarioExit(Sender: TObject);
+    procedure BtnBuscaFuncionarioClick(Sender: TObject);
+    procedure BtnGerarClick(Sender: TObject);
+  private
+    loFuncoes: TFuncoes;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmServicosRealizadosPorFuncionario: TfrmServicosRealizadosPorFuncionario;
+
+implementation
+
+uses unDM, unFuncionarios, unRelServicosRealizadosPorFuncionario;
+
+{$R *.dfm}
+
+procedure TfrmServicosRealizadosPorFuncionario.BtnSairClick(
+  Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.FormCreate(Sender: TObject);
+begin
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.FormDestroy(
+  Sender: TObject);
+begin
+  loFuncoes.Free;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    BtnSairClick(self);
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.FormKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.edtCodFuncionarioExit(
+  Sender: TObject);
+begin
+  if edtCodFuncionario.Text <> trim('') then
+    begin
+      lblFuncionario.Caption := loFuncoes.BuscaFk(edtCodFuncionario.Text,'funcionarios','nome');
+
+      if lblFuncionario.Caption = trim('') then
+        begin
+          edtCodFuncionario.Clear;
+          BtnBuscaFuncionario.SetFocus;
+        end
+      else
+        mskInicial.SetFocus;
+    end;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.BtnBuscaFuncionarioClick(
+  Sender: TObject);
+begin
+  frmFuncionarios := TfrmFuncionarios.Create(self);
+  frmFuncionarios.telaChamando := 6;
+  frmFuncionarios.ShowModal;
+  FreeAndNil(frmFuncionarios);
+
+  if lblFuncionario.Caption <> trim('') then
+    mskInicial.SetFocus;
+end;
+
+procedure TfrmServicosRealizadosPorFuncionario.BtnGerarClick(
+  Sender: TObject);
+begin
+  if (edtCodFuncionario.Text = trim('')) or (edtCodFuncionario.Text = trim('0')) then
+    begin
+      MessageDlg('Por favor, selecione um funcionário!',mtWarning,[mbOk],0);
+      edtCodFuncionario.SetFocus;
+      Exit;
+    end;
+
+  if (mskInicial.Text = '  /  /    ') or (mskFinal.Text = '  /  /    ') then
+    begin
+      MessageDlg('Por favor, digite o período corretamente!',mtWarning,[mbOk],0);
+      mskInicial.SetFocus;
+      Exit;
+    end;
+
+  try
+    qryRel.Close;
+    qryRel.SQL.Clear;
+    qryRel.SQL.Add('SELECT io.codos, ordem.status, io.horainicial, io.horafinal,');
+    qryRel.SQL.Add('io.qtdhoras, io.valorhora, io.total, io.datacad, io.obs, ordem.osbloco');
+    qryRel.SQL.Add('FROM itensos io, os ordem');
+    qryRel.SQL.Add('WHERE ordem.codigo = io.codos');
+    qryRel.SQL.Add('AND io.codfuncionario = :func');
+    qryRel.SQL.Add('AND ordem.dataabertura BETWEEN :dtini AND :dtfin');
+
+    if CbxStatus.ItemIndex <> 2 then
+      qryRel.SQL.Add('AND ordem.status = :sta');
+
+    qryRel.ParamByName('func').AsInteger := StrToInt(edtCodFuncionario.Text);
+
+    if CbxStatus.ItemIndex <> 2 then
+      begin
+        if CbxStatus.ItemIndex = 0 then
+          qryRel.ParamByName('sta').AsString := 'A';
+
+        if CbxStatus.ItemIndex = 1 then
+          qryRel.ParamByName('sta').AsString := 'F';
+      end;
+
+    qryRel.ParamByName('dtini').AsDate := StrToDate(mskInicial.Text);
+    qryRel.ParamByName('dtfin').AsDate := StrToDate(mskFinal.Text);
+
+    qryRel.Open;
+    cdsRel.Close;
+    cdsRel.Open;
+
+    try
+      frmRelServicosRealizadosPorFuncionario := TfrmRelServicosRealizadosPorFuncionario.Create(self);
+      frmRelServicosRealizadosPorFuncionario.lblStatus.Caption := CbxStatus.Text;
+      frmRelServicosRealizadosPorFuncionario.lblPeriodoInicial.Caption := mskInicial.Text;
+      frmRelServicosRealizadosPorFuncionario.lblPeriodoFinal.Caption   := mskFinal.Text;
+      frmRelServicosRealizadosPorFuncionario.lblFuncionario.Caption    := lblFuncionario.Caption;
+      frmRelServicosRealizadosPorFuncionario.RlRptRelatorio.Preview();
+    finally
+      FreeAndNil(frmRelServicosRealizadosPorFuncionario);
+    end;
+
+  except
+    MessageDlg('Erro ao gerar Relatório de Serviços Realizados!',mtError,[mbOk],0);
+  end;
+end;
+
+end.

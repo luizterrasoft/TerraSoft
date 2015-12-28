@@ -1,0 +1,594 @@
+object frmManutencaoCliente: TfrmManutencaoCliente
+  Left = 212
+  Top = 206
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'MANUTEN'#199#195'O CLIENTE'
+  ClientHeight = 502
+  ClientWidth = 699
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PnDadosPrincipais: TPanel
+    Left = 0
+    Top = 0
+    Width = 699
+    Height = 457
+    Align = alTop
+    Color = 16704450
+    TabOrder = 0
+    object lblCodigo: TLabel
+      Left = 8
+      Top = 8
+      Width = 33
+      Height = 13
+      Caption = 'C'#243'digo'
+    end
+    object lblNome: TLabel
+      Left = 80
+      Top = 8
+      Width = 28
+      Height = 13
+      Caption = 'Nome'
+    end
+    object lblNascimento: TLabel
+      Left = 504
+      Top = 8
+      Width = 56
+      Height = 13
+      Caption = 'Nascimento'
+    end
+    object lblDataCadastro: TLabel
+      Left = 584
+      Top = 8
+      Width = 83
+      Height = 13
+      Caption = 'Data de Cadastro'
+    end
+    object lblEndereco: TLabel
+      Left = 8
+      Top = 48
+      Width = 46
+      Height = 13
+      Caption = 'Endere'#231'o'
+    end
+    object lblNumero: TLabel
+      Left = 320
+      Top = 48
+      Width = 37
+      Height = 13
+      Caption = 'N'#250'mero'
+    end
+    object lblMunicipio: TLabel
+      Left = 400
+      Top = 48
+      Width = 47
+      Height = 13
+      Caption = 'Munic'#237'pio'
+    end
+    object lblUF: TLabel
+      Left = 624
+      Top = 48
+      Width = 14
+      Height = 13
+      Caption = 'UF'
+    end
+    object lblFone: TLabel
+      Left = 8
+      Top = 88
+      Width = 24
+      Height = 13
+      Caption = 'Fone'
+    end
+    object lblCelular: TLabel
+      Left = 104
+      Top = 88
+      Width = 32
+      Height = 13
+      Caption = 'Celular'
+    end
+    object lblCPF: TLabel
+      Left = 200
+      Top = 88
+      Width = 20
+      Height = 13
+      Caption = 'CPF'
+    end
+    object lblRG: TLabel
+      Left = 320
+      Top = 88
+      Width = 16
+      Height = 13
+      Caption = 'RG'
+    end
+    object lblEstadoCivil: TLabel
+      Left = 440
+      Top = 88
+      Width = 55
+      Height = 13
+      Caption = 'Estado Civil'
+    end
+    object lblConjuge: TLabel
+      Left = 8
+      Top = 128
+      Width = 39
+      Height = 13
+      Caption = 'Conjug'#234
+    end
+    object lblEmpresaTrabalha: TLabel
+      Left = 8
+      Top = 168
+      Width = 107
+      Height = 13
+      Caption = 'Empresa que Trabalha'
+    end
+    object lblProfissao: TLabel
+      Left = 320
+      Top = 168
+      Width = 76
+      Height = 13
+      Caption = 'Profiss'#227'o/Cargo'
+    end
+    object lblPai: TLabel
+      Left = 8
+      Top = 208
+      Width = 15
+      Height = 13
+      Caption = 'Pai'
+    end
+    object lblMae: TLabel
+      Left = 320
+      Top = 208
+      Width = 21
+      Height = 13
+      Caption = 'M'#227'e'
+    end
+    object lblOutroDoc: TLabel
+      Left = 552
+      Top = 88
+      Width = 84
+      Height = 13
+      Caption = 'Outro Documento'
+    end
+    object lblValorAluguel: TLabel
+      Left = 8
+      Top = 248
+      Width = 62
+      Height = 13
+      Caption = 'Valor Aluguel'
+    end
+    object lblReferencia: TLabel
+      Left = 96
+      Top = 248
+      Width = 52
+      Height = 13
+      Caption = 'Refer'#234'ncia'
+    end
+    object lblFoneAluguel: TLabel
+      Left = 320
+      Top = 248
+      Width = 93
+      Height = 13
+      Caption = 'Fone Resp. Aluguel'
+    end
+    object lblEmpresasPrazo: TLabel
+      Left = 408
+      Top = 288
+      Width = 146
+      Height = 13
+      Caption = 'Empresas que compra '#224' prazo:'
+    end
+    object LblUltimaCompraPrazo: TLabel
+      Left = 8
+      Top = 288
+      Width = 106
+      Height = 13
+      Caption = #218'ltima compra '#224' Prazo'
+    end
+    object lblEmpresaUltimaCompra: TLabel
+      Left = 128
+      Top = 288
+      Width = 124
+      Height = 13
+      Caption = 'Empresa da '#250'ltima compra'
+    end
+    object lblValorCompra: TLabel
+      Left = 8
+      Top = 328
+      Width = 78
+      Height = 13
+      Caption = 'Valor da Compra'
+    end
+    object lblValorPrestacao: TLabel
+      Left = 96
+      Top = 328
+      Width = 90
+      Height = 13
+      Caption = 'Valor da Presta'#231#227'o'
+    end
+    object lblTipoPagamento: TLabel
+      Left = 200
+      Top = 328
+      Width = 93
+      Height = 13
+      Caption = 'Tipo de Pagamento'
+    end
+    object lblObs: TLabel
+      Left = 8
+      Top = 368
+      Width = 63
+      Height = 13
+      Caption = 'Observa'#231#245'es'
+    end
+    object edtCodigo: TEdit
+      Left = 8
+      Top = 24
+      Width = 55
+      Height = 21
+      CharCase = ecUpperCase
+      Enabled = False
+      TabOrder = 0
+    end
+    object edtNome: TEdit
+      Left = 80
+      Top = 24
+      Width = 407
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 1
+    end
+    object mskNascimento: TMaskEdit
+      Left = 504
+      Top = 24
+      Width = 73
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '99/99/9999;1;_'
+      MaxLength = 10
+      TabOrder = 2
+      Text = '  /  /    '
+    end
+    object mskDataCadastro: TMaskEdit
+      Left = 584
+      Top = 24
+      Width = 73
+      Height = 21
+      CharCase = ecUpperCase
+      Enabled = False
+      EditMask = '99/99/9999;1;_'
+      MaxLength = 10
+      TabOrder = 3
+      Text = '  /  /    '
+    end
+    object edtEndereco: TEdit
+      Left = 8
+      Top = 64
+      Width = 297
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 4
+    end
+    object edtNumero: TEdit
+      Left = 320
+      Top = 64
+      Width = 65
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 5
+    end
+    object edtMunicipio: TEdit
+      Left = 400
+      Top = 64
+      Width = 209
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 6
+    end
+    object CbxUF: TComboBox
+      Left = 624
+      Top = 64
+      Width = 41
+      Height = 21
+      Style = csDropDownList
+      CharCase = ecUpperCase
+      ItemHeight = 13
+      ItemIndex = 23
+      TabOrder = 7
+      Text = 'SC'
+      Items.Strings = (
+        'AC'
+        'AL'
+        'AP'#9
+        'AM'
+        'BA'#9
+        'CE'
+        'DF'#9
+        'ES'
+        'GO'
+        'MA'
+        'MT'
+        'MS'
+        'MG'#9
+        'PA'
+        'PB'
+        'PR'
+        'PE'
+        'PI'
+        'RJ'
+        'RN'
+        'RS'
+        'RO'
+        'RR'
+        'SC'
+        'SP'
+        'SE'
+        'TO')
+    end
+    object mskFone: TMaskEdit
+      Left = 8
+      Top = 104
+      Width = 83
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '(99) 9999-9999;1;_'
+      MaxLength = 14
+      TabOrder = 8
+      Text = '(  )     -    '
+    end
+    object mskCelular: TMaskEdit
+      Left = 104
+      Top = 104
+      Width = 83
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '(99) 9999-9999;1;_'
+      MaxLength = 14
+      TabOrder = 9
+      Text = '(  )     -    '
+    end
+    object mskCPF: TMaskEdit
+      Left = 200
+      Top = 104
+      Width = 110
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '999.999.999-99;1;_'
+      MaxLength = 14
+      TabOrder = 10
+      Text = '   .   .   -  '
+    end
+    object edtRG: TEdit
+      Left = 320
+      Top = 104
+      Width = 110
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 11
+    end
+    object CbxEstadoCivil: TComboBox
+      Left = 440
+      Top = 104
+      Width = 102
+      Height = 21
+      Style = csDropDownList
+      CharCase = ecUpperCase
+      ItemHeight = 13
+      ItemIndex = 0
+      TabOrder = 12
+      Text = 'SOLTEIRO(A)'
+      Items.Strings = (
+        'SOLTEIRO(A)'
+        'CASADO(A)'
+        'DIVORCIADO(A)'
+        'VIUVO(A)')
+    end
+    object edtConjuge: TEdit
+      Left = 8
+      Top = 144
+      Width = 302
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 14
+    end
+    object edtEmpresa: TEdit
+      Left = 8
+      Top = 184
+      Width = 302
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 15
+    end
+    object edtprofissao: TEdit
+      Left = 320
+      Top = 184
+      Width = 246
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 16
+    end
+    object edtPai: TEdit
+      Left = 8
+      Top = 224
+      Width = 302
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 17
+    end
+    object edtMae: TEdit
+      Left = 320
+      Top = 224
+      Width = 302
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 18
+    end
+    object edtOutroDocumento: TEdit
+      Left = 552
+      Top = 104
+      Width = 118
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 13
+    end
+    object edtValorAluguel: TEdit
+      Left = 8
+      Top = 264
+      Width = 78
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 19
+      OnExit = edtValorAluguelExit
+    end
+    object edtReferencia: TEdit
+      Left = 96
+      Top = 264
+      Width = 214
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 20
+    end
+    object mskFoneRespAluguel: TMaskEdit
+      Left = 320
+      Top = 264
+      Width = 88
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '(99) 9999-9999;1;_'
+      MaxLength = 14
+      TabOrder = 21
+      Text = '(  )     -    '
+    end
+    object RchEdtEmpresas: TRichEdit
+      Left = 408
+      Top = 304
+      Width = 224
+      Height = 41
+      TabOrder = 24
+    end
+    object mskUltimaCompraPrazo: TMaskEdit
+      Left = 8
+      Top = 304
+      Width = 105
+      Height = 21
+      CharCase = ecUpperCase
+      EditMask = '99/99/9999;1;_'
+      MaxLength = 10
+      TabOrder = 22
+      Text = '  /  /    '
+    end
+    object edtUltimaEmpresaComprou: TEdit
+      Left = 128
+      Top = 304
+      Width = 265
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 23
+    end
+    object edtValorCompra: TEdit
+      Left = 8
+      Top = 344
+      Width = 81
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 25
+      OnExit = edtValorCompraExit
+    end
+    object edtValorPrestacao: TEdit
+      Left = 96
+      Top = 344
+      Width = 89
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 26
+      OnExit = edtValorPrestacaoExit
+    end
+    object CbxTipoPgto: TComboBox
+      Left = 200
+      Top = 344
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      CharCase = ecUpperCase
+      ItemHeight = 13
+      ItemIndex = 0
+      TabOrder = 27
+      Text = 'A PRAZO DINHEIRO'
+      Items.Strings = (
+        'A PRAZO DINHEIRO'
+        'A VISTA DINHEIRO'
+        'A PRAZO CHEQUE'
+        'A VISTA CHEQUE'
+        'A PRAZO CARTAO'
+        'A VISTA CARTAO')
+    end
+    object RchEdtObs: TRichEdit
+      Left = 8
+      Top = 384
+      Width = 617
+      Height = 57
+      TabOrder = 28
+    end
+  end
+  object PnBotoes: TPanel
+    Left = 0
+    Top = 461
+    Width = 699
+    Height = 41
+    Align = alBottom
+    Color = clMoneyGreen
+    TabOrder = 1
+    object BtnGravar: TBitBtn
+      Left = 272
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'GRAVAR'
+      TabOrder = 0
+      OnClick = BtnGravarClick
+    end
+    object BtnCancelar: TBitBtn
+      Left = 352
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'CANCELAR'
+      TabOrder = 1
+      OnClick = BtnCancelarClick
+    end
+  end
+  object qryCliente: TSQLQuery
+    DataSource = dsCliente
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = frmPrincipal.Connection
+    Left = 544
+    Top = 136
+  end
+  object dsCliente: TDataSource
+    DataSet = cdsCliente
+    Left = 576
+    Top = 136
+  end
+  object dspCliente: TDataSetProvider
+    DataSet = qryCliente
+    Left = 616
+    Top = 136
+  end
+  object cdsCliente: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dspCliente'
+    Left = 648
+    Top = 136
+  end
+end

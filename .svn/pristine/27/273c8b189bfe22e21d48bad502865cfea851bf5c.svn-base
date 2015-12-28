@@ -1,0 +1,183 @@
+inherited frmFornecedores: TfrmFornecedores
+  Left = 270
+  Top = 122
+  Caption = 'FORNECEDORES'
+  ClientHeight = 532
+  ClientWidth = 845
+  OldCreateOrder = True
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PnTitulo: TPanel
+    Width = 845
+    ExplicitWidth = 845
+    inherited lblTitulo: TLabel
+      Left = 148
+      Width = 328
+      Caption = 'CONSULTA DE FORNECEDORES'
+      ExplicitLeft = 148
+      ExplicitWidth = 328
+    end
+  end
+  inherited PnConsulta: TPanel
+    Width = 845
+    ExplicitWidth = 845
+    inherited Label2: TLabel
+      Left = 547
+      Top = 31
+      ExplicitLeft = 547
+      ExplicitTop = 31
+    end
+    object Bevel1: TBevel [2]
+      Left = 174
+      Top = 7
+      Width = 2
+      Height = 50
+    end
+    inherited edtConsulta: TEdit
+      Left = 183
+      Top = 29
+      OnKeyPress = edtConsultaKeyPress
+      ExplicitLeft = 183
+      ExplicitTop = 29
+    end
+    object RdBtnCodigo: TRadioButton
+      Left = 8
+      Top = 24
+      Width = 113
+      Height = 17
+      Caption = 'C'#243'digo'
+      TabOrder = 1
+    end
+    object RdBtnRazao: TRadioButton
+      Left = 8
+      Top = 40
+      Width = 121
+      Height = 17
+      Caption = 'Raz'#227'o Social/Nome'
+      Checked = True
+      TabOrder = 2
+      TabStop = True
+    end
+    object RdBtnFantasia: TRadioButton
+      Left = 64
+      Top = 24
+      Width = 105
+      Height = 17
+      Caption = 'Fantasia/Apelido'
+      TabOrder = 3
+    end
+  end
+  inherited PnDados: TPanel
+    Width = 845
+    Height = 391
+    ExplicitWidth = 845
+    ExplicitHeight = 391
+    object GrdFornecedores: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 843
+      Height = 389
+      Align = alClient
+      Color = 13565951
+      DataSource = dsDados
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -10
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnDrawColumnCell = GrdFornecedoresDrawColumnCell
+      OnDblClick = GrdFornecedoresDblClick
+      OnKeyPress = GrdFornecedoresKeyPress
+      OnTitleClick = GrdFornecedoresTitleClick
+      Columns = <
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CODIGO'
+          Title.Alignment = taCenter
+          Title.Caption = 'C'#243'digo'
+          Width = 58
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RAZAOSOCIAL'
+          Title.Alignment = taCenter
+          Title.Caption = 'Raz'#227'o Social'
+          Width = 174
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FANTASIA'
+          Title.Alignment = taCenter
+          Title.Caption = 'Fantasia'
+          Width = 167
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'FONE1'
+          Title.Alignment = taCenter
+          Title.Caption = 'Fone 1'
+          Width = 89
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CELULAR'
+          Title.Alignment = taCenter
+          Title.Caption = 'Celular'
+          Width = 85
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'IE'
+          Title.Alignment = taCenter
+          Width = 95
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CNPJ'
+          Title.Alignment = taCenter
+          Width = 134
+          Visible = True
+        end>
+    end
+  end
+  inherited PnAcoes: TPanel
+    Top = 497
+    Width = 845
+    ExplicitTop = 497
+    ExplicitWidth = 845
+    inherited BtnRelatorios: TBitBtn
+      OnClick = BtnRelatoriosClick
+    end
+  end
+  inherited qryDados: TSQLQuery
+    Left = 480
+    Top = 9
+  end
+  inherited dsDados: TDataSource
+    Left = 512
+    Top = 9
+  end
+  inherited cdsDados: TClientDataSet
+    Left = 544
+    Top = 9
+  end
+  inherited dspDados: TDataSetProvider
+    Left = 576
+    Top = 9
+  end
+end

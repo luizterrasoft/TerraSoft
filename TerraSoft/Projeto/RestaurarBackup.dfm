@@ -1,0 +1,133 @@
+object FRestaurarBackup: TFRestaurarBackup
+  Left = 311
+  Top = 109
+  Width = 666
+  Height = 504
+  Caption = 'Restaurar backup'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  DesignSize = (
+    658
+    477)
+  PixelsPerInch = 96
+  TextHeight = 13
+  object BTRestaurarBackup: TButton
+    Left = 394
+    Top = 411
+    Width = 121
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Restarurar backup'
+    Default = True
+    TabOrder = 0
+    OnClick = BTRestaurarBackupClick
+  end
+  object Button2: TButton
+    Left = 522
+    Top = 410
+    Width = 121
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Sair'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object Memo1: TMemo
+    Left = 8
+    Top = 64
+    Width = 634
+    Height = 338
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 2
+    WordWrap = False
+  end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Top = 11
+    Width = 635
+    Height = 46
+    Anchors = [akLeft, akTop, akRight]
+    Caption = 'Configura'#231#245'es'
+    TabOrder = 3
+    object CBDesativarIndices: TCheckBox
+      Left = 8
+      Top = 20
+      Width = 97
+      Height = 17
+      Caption = 'Desativar '#237'ndices'
+      TabOrder = 0
+    end
+    object CBSemValidar: TCheckBox
+      Left = 216
+      Top = 20
+      Width = 81
+      Height = 17
+      Caption = 'Sem validar'
+      TabOrder = 1
+    end
+    object CBSemShadow: TCheckBox
+      Left = 120
+      Top = 20
+      Width = 89
+      Height = 17
+      Caption = 'Sem shadow'
+      TabOrder = 2
+    end
+    object CBDetalhes: TCheckBox
+      Left = 568
+      Top = 20
+      Width = 65
+      Height = 17
+      Caption = 'Detalhes'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+    end
+    object CBUmaTabela: TCheckBox
+      Left = 304
+      Top = 20
+      Width = 121
+      Height = 17
+      Caption = 'Uma tabela por vez'
+      TabOrder = 4
+    end
+    object CBSubstituir: TCheckBox
+      Left = 432
+      Top = 20
+      Width = 121
+      Height = 17
+      Caption = 'Substituir base antiga'
+      Checked = True
+      State = cbChecked
+      TabOrder = 5
+    end
+  end
+  object IBConfigService1: TIBConfigService
+    TraceFlags = []
+    Left = 184
+    Top = 136
+  end
+  object IBRestoreService1: TIBRestoreService
+    LoginPrompt = False
+    TraceFlags = []
+    PageBuffers = 0
+    Left = 248
+    Top = 136
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = 'FBK'
+    FileName = 'DADOS.FBK'
+    Filter = 'Backup do Firebird(*.fbk)|*.fbk|Todos os arquivos(*.*)|*.*'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 216
+    Top = 136
+  end
+end

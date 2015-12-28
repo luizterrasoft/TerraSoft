@@ -1,0 +1,250 @@
+unit unFuncoes;
+
+interface
+
+uses
+  Dialogs;
+
+type
+
+  TFuncoes = class
+    private
+
+    protected
+
+    public
+
+      function TrataReal(Valor: string): string;  
+      function BuscaFk(codigo,tabela,desc: string): string;
+      function Extenso(valor: real): string;
+      function Permissao(iTela, iBotao: integer; bInicioTela: boolean): boolean;
+      function BuscaTela(sCaption: string): integer;
+  end;
+
+implementation
+
+uses unDM, DB, Classes, SqlExpr, SysUtils, unPrincipal;
+
+Const
+  Unidades: array[1..9] of string = ('Um', 'Dois', 'Tres', 'Quatro', 'Cinco', 'Seis', 'Sete', 'Oito', 'Nove');
+  Dez:      array[1..9] of string = ('Onze', 'Doze', 'Treze', 'Quatorze', 'Quinze', 'Dezesseis', 'Dezessete', 'Dezoito', 'Dezenove');
+  Dezenas:  array[1..9] of string = ('Dez', 'Vinte', 'Trinta', 'Quarenta', 'Cinquenta', 'Sessenta', 'Setenta', 'Oitenta', 'Noventa');
+  Centenas: array[1..9] of string = ('Cento', 'Duzentos', 'Trezentos', 'Quatrocentos', 'Quinhentos', 'Seiscentos', 'Setecentos', 'Oitocentos', 'Novecentos');
+  MoedaSigular  = 'Real';
+  MoedaPlural   = 'Reais';
+  CentSingular  = 'Centavo';
+  CentPlural    = 'Centavos';
+  Zero          = 'Zero';
+
+{ TFuncoes }
+
+function TFuncoes.BuscaFk(codigo,tabela,desc: string): string;
+begin
+  DM.cdsGeral.Close;
+  
+  if (codigo = trim('')) or (codigo = trim('0')) then
+    Exit;
+
+  try
+    with DM.qryGeral, SQL do
+      begin
+        Close;
+        Clear;
+        Add('SELECT ' + desc + ' FROM '+tabela);
+        Add('WHERE codigo = :cod');
+        ParamByName('cod').AsInteger := StrToInt(codigo);
+        Open;
+      end;
+  except
+
+  end;
+
+  DM.cdsGeral.Open;
+  DM.cdsGeral.Refresh;
+
+  if DM.cdsGeral.RecordCount > 0 then
+    Result := DM.cdsGeral.FieldByName(desc).AsString
+  else
+    Result := '';
+
+  DM.cdsGeral.Close;
+
+end;
+
+function TFuncoes.BuscaTela(sCaption: string): integer;
+begin
+  Result := 0;
+
+  try
+    DM.qryGeral.Close;
+    DM.qryGeral.SQL.Clear;
+    DM.qryGeral.SQL.Add('SELECT codigo FROM formularios');
+    DM.qryGeral.SQL.Add('WHERE caption = :cap');
+    DM.qryGeral.ParamByName('cap').AsString := sCaption;
+    DM.qryGeral.Open;
+    DM.cdsGeral.Close;
+    DM.cdsGeral.Open;
+
+    if DM.cdsGeral.RecordCount > 0 then
+      Result := DM.cdsGeral.FieldByName('codigo').AsInteger;
+  except
+    MessageDlg('Erro ao buscar codigo da tela!',mtError,[mbOk],0);
+  end;          
+end;
+
+function TFuncoes.extenso(valor: real): string;
+var Texto,Milhar,Centena,Centavos,msg: string;
+////////////////////////////////fucao auxiliar extenso////////////////////////////////
+  function ifs(Expressao: Boolean; CasoVerdadeiro, CasoFalso: String): String;
+    begin
+      if Expressao then
+      Result:=CasoVerdadeiro
+      else
+      Result:=CasoFalso;
+  end;
+////////////////////////////funcao auxiliar extenso/////////////////////////
+  function MiniExtenso (trio: string): string;
+    var
+      Unidade, Dezena, Centena: string;
+    begin
+      Unidade:='';
+      Dezena:='';
+      Centena:='';
+      if (trio[2]='1') and (trio[3]<>'0') then
+        begin
+          Unidade:=Dez[strtoint(trio[3])];
+          Dezena:='';
+        end
+      else
+        begin
+          if trio[2]<>'0' then Dezena:=Dezenas[strtoint(trio[2])];
+          if trio[3]<>'0' then Unidade:=Unidades[strtoint(trio[3])];
+      end;
+      if (trio[1]='1') and (Unidade='') and (Dezena='') then
+        Centena:='Cem'
+      else
+        if trio[1]<>'0' then
+          Centena:=Centenas[strtoint(trio[1])]
+        else Centena:='';
+      Result:= Centena + ifs((Centena<>'') and ((Dezena<>'') or (Unidade<>'')), ' e ', '')
+      + Dezena + ifs((Dezena<>'') and (Unidade<>''),' e ', '') + Unidade;
+  end;
+
+begin
+  if (valor>999999.99) or (valor<0) then
+    begin
+      msg:='O valor está fora do intervalo permitido.';
+      msg:=msg+'O número deve ser maior ou igual a zero e menor que 999.999,99.';
+      msg:=msg+' Se não for corrigido o número não será escrito por extenso.';
+      showmessage(msg);
+      Result:='';
+      exit;
+    end;
+  if valor=0 then
+    begin
+      Result:='';
+      Exit;
+  end;
+  Texto:=formatfloat('000000.00',valor);
+  Milhar:=MiniExtenso(Copy(Texto,1,3));
+  Centena:=MiniExtenso(Copy(Texto,4,3));
+  Centavos:=MiniExtenso('0'+Copy(Texto,8,2));
+  Result:=Milhar;
+  if Milhar<>'' then
+    begin
+      if copy(texto,4,3)='000' then
+        Result:=Result+' Mil Reais'
+      else
+        Result:=Result+' Mil, ';
+  end;
+  if (((copy(texto,4,2)='00') and (Milhar<>'') and (copy(texto,6,1)<>'0')))or (centavos='') and (milhar<>'')  then
+    Result:=Result+' e ';
+  if (Milhar+Centena <>'') then
+    Result:=Result+Centena;
+  if (Milhar='') and (copy(texto,4,3)='001') then
+    Result:=Result+' Real'
+  else
+  if (copy(texto,4,3)<>'000') then
+    Result:=Result+' Reais';
+  if Centavos='' then
+    begin
+      Result:=Result+'.';
+      Exit;
+  end
+  else
+    begin
+      if Milhar+Centena='' then
+        Result:=Centavos
+      else
+        Result:=Result+', e '+Centavos;
+  end;
+  if (copy(texto,8,2)='01') and (Centavos<>'') then
+      Result:=Result+' Centavo.'
+  else
+      Result:=Result+' Centavos.';
+end;
+
+function TFuncoes.Permissao(iTela, iBotao: integer; bInicioTela: boolean): boolean;
+begin
+  Result := False;
+
+  DM.qryGeral.Close;
+  DM.qryGeral.SQL.Clear;
+  DM.qryGeral.SQL.Add('SELECT * FROM permissoes'); // COUNT(codigo) AS Qtd
+  DM.qryGeral.SQL.Add('WHERE codusuario = :usu');
+
+  if bInicioTela = true then
+    begin
+      DM.qryGeral.SQL.Add('AND codform = :te');
+      DM.qryGeral.SQL.Add('AND telainteira = :param');
+      DM.qryGeral.ParamByName('te').AsInteger   := iTela;
+      DM.qryGeral.ParamByName('param').AsString := 'S';
+    end
+  else
+  if bInicioTela = false then
+    begin
+      DM.qryGeral.SQL.Add('AND codform = :te');
+      DM.qryGeral.SQL.Add('AND codbotao = :bot');
+      DM.qryGeral.ParamByName('te').AsInteger := iTela;
+      DM.qryGeral.ParamByName('bot').AsInteger:= iBotao;
+    end;
+
+  DM.qryGeral.ParamByName('usu').AsInteger := frmPrincipal.iCodUsuario;
+
+  DM.qryGeral.Open;
+  DM.cdsGeral.Close;
+  DM.cdsGeral.Open;
+
+  if DM.cdsGeral.RecordCount < 1 then
+  //  if DM.cdsGeral.FieldByName('qtd').AsInteger < 1 then
+    Result := True;
+
+  if (bInicioTela = true) and (Result = false) then
+    MessageDlg('Usuário não tem permissão para acessar essa tela!',mtWarning,[mbOk],0)
+  else
+  if (bInicioTela = false) and (Result = false) then
+    MessageDlg('Usuário não tem permissão para executar essa função!',mtWarning,[mbOk],0);
+
+end;
+
+function TFuncoes.TrataReal(Valor: string): string;
+begin
+  try
+    if Valor <> '' then
+      begin
+        Valor := FormatFloat('#0.00',StrToFloat(Valor));
+
+        Result := Valor;
+      end
+    else
+      begin
+        Valor := '0,00';
+        Valor := StringReplace(Valor,',','.',[rfReplaceAll]);
+        Result := Valor;
+      end;
+  except
+    MessageDlg('Erro ao formatar o valor!',mtError,[mbOk],0);
+  end;
+end;
+
+end.

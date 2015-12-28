@@ -1,0 +1,8 @@
+SELECT cp.*, forn.razaosocial AS Fornecedor FROM contaspagar cp
+INNER JOIN fornecedores forn
+ON forn.codigo = cp.codfornecedor
+WHERE cp.vencimento BETWEEN :dtini AND :dtfin
+AND cp.vencimento < :hoje AND cp.status <> :st1 AND cp.status <> :st2
+AND cp.status = :st
+AND cp.renegociada IS NULL
+ORDER BY CODIGO

@@ -1,0 +1,55 @@
+object frmPrincipal: TfrmPrincipal
+  Left = 192
+  Top = 107
+  Width = 928
+  Height = 480
+  Caption = 'GERENCIAMENTO DE BIBLIOTECA'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  Menu = MnMnuPrincipal
+  OldCreateOrder = False
+  WindowState = wsMaximized
+  PixelsPerInch = 96
+  TextHeight = 13
+  object MnMnuPrincipal: TMainMenu
+    Left = 176
+    Top = 72
+    object Cadastros1: TMenuItem
+      Caption = 'Cadastros'
+      object Atendentes1: TMenuItem
+        Caption = 'Atendentes'
+        OnClick = Atendentes1Click
+      end
+      object Leitores1: TMenuItem
+        Caption = 'Leitores'
+        OnClick = Leitores1Click
+      end
+      object Livros1: TMenuItem
+        Caption = 'Livros'
+        OnClick = Livros1Click
+      end
+    end
+    object Movimentaes1: TMenuItem
+      Caption = 'Movimenta'#231#245'es'
+      object Emprestimos1: TMenuItem
+        Caption = 'Emprestimos/Devolu'#231#245'es'
+        OnClick = Emprestimos1Click
+      end
+    end
+    object Ajuda1: TMenuItem
+      Caption = 'Ajuda'
+      object Sobreosistema1: TMenuItem
+        Caption = 'Sobre o sistema...'
+      end
+    end
+    object Sair1: TMenuItem
+      Caption = 'Sair'
+      OnClick = Sair1Click
+    end
+  end
+end

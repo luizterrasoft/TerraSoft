@@ -1,0 +1,4 @@
+SELECT * FROM permissoes
+WHERE codusuario = :usu
+AND codform = :te
+AND codbotao = :bot

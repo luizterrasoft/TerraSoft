@@ -1,0 +1,30 @@
+unit unPrincipal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unFuncoes;
+
+type
+  TfrmPrincipal = class(TForm)
+    procedure FormCreate(Sender: TObject);
+  private
+    loFuncoes: TFuncoes;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmPrincipal.FormCreate(Sender: TObject);
+begin
+  log
+end;
+
+end.

@@ -1,0 +1,23 @@
+unit unMetodos;
+
+interface
+
+uses
+  SQLExpr, Classes;
+
+type
+  TFuncoes = class
+
+    private
+
+    public
+      procedure pCriarQuery(var NomeForm: TComponent; var NomeQry: TSQLQuery);
+
+  end;
+
+implementation
+
+{ TFuncoes }
+
+
+end.

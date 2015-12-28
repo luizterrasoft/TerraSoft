@@ -1,0 +1,179 @@
+object frmCreditosCliente: TfrmCreditosCliente
+  Left = 412
+  Top = 240
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'CR'#201'DITOS DO CLIENTE'
+  ClientHeight = 342
+  ClientWidth = 612
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 112
+    Top = 288
+    Width = 62
+    Height = 20
+    Caption = 'Cliente:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 112
+    Top = 312
+    Width = 52
+    Height = 20
+    Caption = 'Saldo:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object lblCliente: TLabel
+    Left = 176
+    Top = 288
+    Width = 6
+    Height = 20
+    Color = clBtnFace
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblSaldo: TLabel
+    Left = 176
+    Top = 312
+    Width = 6
+    Height = 20
+    Color = clBtnFace
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object GrdCreditos: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 612
+    Height = 281
+    Align = alTop
+    DataSource = dsCreditos
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'CODIGO'
+        Title.Alignment = taCenter
+        Title.Caption = 'C'#243'digo'
+        Width = 56
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRICAO'
+        Title.Alignment = taCenter
+        Title.Caption = 'Descri'#231#227'o'
+        Width = 287
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'ENTRADA'
+        Title.Alignment = taCenter
+        Title.Caption = 'Entrada'
+        Width = 81
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SAIDA'
+        Title.Alignment = taCenter
+        Title.Caption = 'Sa'#237'da'
+        Width = 81
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'SALDO'
+        Title.Alignment = taCenter
+        Title.Caption = 'Saldo'
+        Width = 81
+        Visible = True
+      end>
+  end
+  object BtnIncluir: TBitBtn
+    Left = 13
+    Top = 292
+    Width = 83
+    Height = 41
+    Caption = 'Movimentar'
+    TabOrder = 1
+    OnClick = BtnIncluirClick
+  end
+  object BtnSair: TBitBtn
+    Left = 528
+    Top = 288
+    Width = 75
+    Height = 25
+    Caption = 'Sair - ESC'
+    TabOrder = 2
+    OnClick = BtnSairClick
+  end
+  object dsCreditos: TDataSource
+    DataSet = cdsCreditos
+    Left = 464
+    Top = 16
+  end
+  object QryCreditos: TSQLQuery
+    DataSource = dsCreditos
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = DM.Con
+    Left = 368
+    Top = 16
+  end
+  object cdsCreditos: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dspCreditos'
+    Left = 432
+    Top = 16
+  end
+  object dspCreditos: TDataSetProvider
+    DataSet = QryCreditos
+    Left = 400
+    Top = 16
+  end
+end

@@ -1,0 +1,191 @@
+unit unEmpresas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unConsultas, FMTBcd, Provider, DBClient, DB, SqlExpr, StdCtrls,
+  Buttons, ExtCtrls, Grids, DBGrids, unFuncoes;
+
+type
+  TfrmEmpresa = class(TfrmConsultas)
+    GrdEmpresas: TDBGrid;
+    RdBtnRazao: TRadioButton;
+    RdBtnFantasia: TRadioButton;
+    procedure FormShow(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure GrdEmpresasDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure edtConsultaKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure GrdEmpresasTitleClick(Column: TColumn);
+
+  private
+    loFuncoes: TFuncoes;
+    procedure carregaDados; override;
+  public
+    telachamando: integer;
+  end;
+
+var
+  frmEmpresa: TfrmEmpresa;
+
+implementation
+
+uses unIncluirEmpresa, unIncluirCliente, unPrincipal;
+
+{$R *.dfm}
+
+procedure TfrmEmpresa.FormShow(Sender: TObject);
+begin
+  frmPrincipal.sCampo := 'CODIGO';
+
+  sSQL := 'SELECT * FROM empresas';
+
+  inherited;
+end;
+
+procedure TfrmEmpresa.BtnIncluirClick(Sender: TObject);
+begin
+  inherited;
+  frmIncluirEmpresa := TfrmIncluirEmpresa.Create(self);
+  frmIncluirEmpresa.ShowModal;
+  FreeAndNil(frmIncluirEmpresa);
+  mostraTodos;
+end;
+
+procedure TfrmEmpresa.carregaDados;
+begin
+  inherited;
+  frmIncluirEmpresa.edtCodigo.Text := cdsDados.FieldByName('codigo').AsString;
+  frmIncluirEmpresa.edtRazaoSocial.Text := cdsDados.FieldByName('razaosocial').AsString;
+  frmIncluirEmpresa.edtFantasia.Text  := cdsDados.FieldByName('fantasia').AsString;
+  frmIncluirEmpresa.mskCNPJ.Text := cdsDados.FieldByName('cnpj').AsString;
+  frmIncluirEmpresa.edtIE.Text := cdsDados.FieldByName('ie').AsString;
+  frmIncluirEmpresa.mskFone1.Text := cdsDados.FieldByname('fone1').AsString;
+  frmIncluirEmpresa.mskFone2.Text := cdsDados.FieldByName('fone2').AsString;
+  frmIncluirEmpresa.mskCelular.Text := cdsDados.FieldByName('celular').AsString;
+  frmIncluirEmpresa.edtEndereco.Text := cdsDados.FieldByName('endereco').AsString;
+  frmIncluirEmpresa.edtNumero.Text := cdsDados.FieldByname('numero').AsString;
+  frmIncluirEmpresa.edtComplemento.Text := cdsDados.FieldByName('complemento').AsString;
+  frmIncluirEmpresa.edtBairro.Text := cdsDados.FieldByName('bairro').AsString;
+  frmIncluirEmpresa.edtCodMunicipio.Text := cdsDados.FieldByName('codmunicipio').AsString;
+  frmIncluirEmpresa.lblMunicipio.Caption := loFuncoes.BuscaFk(frmIncluirEmpresa.edtCodMunicipio.Text,'municipios','nome');
+  frmIncluirEmpresa.edtEmail.Text := cdsDados.FieldByName('email').AsString;
+  frmIncluirEmpresa.edtwebSite.Text := cdsDados.FieldByname('website').AsString;
+  frmIncluirEmpresa.CbxTipoEmpresa.ItemIndex := cdsDados.FieldByName('tipoempresa').AsInteger;
+  frmIncluirEmpresa.edtAliquotaSimples.Text := loFuncoes.TrataReal(cdsDados.FieldByName('aliquotasimples').AsString);
+end;
+
+procedure TfrmEmpresa.GrdEmpresasDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+if State = [] then
+  begin
+    if cdsDados.RecNo mod 2 = 1 then
+      GrdEmpresas.Canvas.Brush.Color := clMoneyGreen
+    else
+      GrdEmpresas.Canvas.Brush.Color := clWhite;
+  end;
+  GrdEmpresas.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+end;
+
+procedure TfrmEmpresa.edtConsultaKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  inherited;
+  if key = #13 then
+    begin
+      if edtConsulta.Text <> trim('') then
+        begin
+          with qryDados, SQL do
+            begin
+              Close;
+              Clear;
+
+              // RAZAOSOCIAL
+              if RdBtnRazao.Checked then
+                begin
+                  Add('SELECT * FROM empresas WHERE razaosocial LIKE :rs');
+                  ParamByName('rs').AsString := '%' + edtConsulta.Text + '%';
+                end;
+
+              // APELIDO
+              if RdBtnFantasia.Checked then
+                begin
+                  Add('SELECT * FROM empresas WHERE fantasia LIKE :apelido');
+                  ParamByName('apelido').AsString := '%' + edtConsulta.Text + '%';
+                end;
+              Open;
+            end;
+        end;
+      cdsDados.Open;
+      cdsDados.Refresh;
+
+    end;
+end;
+
+procedure TfrmEmpresa.BtnAlterarClick(Sender: TObject);
+begin
+  frmIncluirEmpresa := TfrmIncluirEmpresa.Create(self);
+
+  inherited;
+
+  frmIncluirEmpresa.ShowModal;
+  FreeAndNil(frmIncluirEmpresa);
+
+  mostraTodos;
+end;
+
+procedure TfrmEmpresa.FormCreate(Sender: TObject);
+begin
+  inherited;
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmEmpresa.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  loFuncoes.Free;
+end;
+
+procedure TfrmEmpresa.BtnExcluirClick(Sender: TObject);
+begin
+  inherited;
+  if MessageDlg('Deseja realmente excluir a empresa '+cdsDados.FieldByName('razaosocial').AsString+'?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+    begin
+      if cdsDados.FieldByName('codigo').AsString <> trim('') then
+        begin
+          try
+            with qryDados, SQL do
+              begin
+                Close;
+                Clear;
+                Add('DELETE FROM empresas WHERE codigo = :cod');
+                ParamByName('cod').AsInteger := cdsDados.FieldByName('codigo').AsInteger;
+                ExecSQL();
+              end;
+          except
+            MessageDlg('Erro ao excluir a empresa!',mtError,[mbOk],0);
+          end;
+        end;
+      mostraTodos;
+    end;
+end;
+
+procedure TfrmEmpresa.GrdEmpresasTitleClick(Column: TColumn);
+begin
+  inherited;
+  frmPrincipal.sCampo := Column.FieldName; // CAMPO RECEBE O NOME DA COLUNA CLICADA,
+
+  sSQL := 'SELECT * FROM empresas ORDER BY' + frmPrincipal.sCampo;
+
+  mostraTodos;
+end;
+
+end.

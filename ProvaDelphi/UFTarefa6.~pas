@@ -1,0 +1,99 @@
+unit UFTarefa6;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons;
+
+type
+  EArquivoNaoEncontrado = class(Exception);
+  ELinhaDadosVazia = class(Exception);
+
+
+  TFTarefa6 = class(TForm)
+    edtArquivoTexto: TEdit;
+    edtValorCalculado: TEdit;
+    lblArquivoTexto: TLabel;
+    lblValorTotalCalculado: TLabel;
+    BtnCalcularArquivo: TBitBtn;
+    BtnProcurarArquivoTexto: TBitBtn;
+    opDlgAbrir: TOpenDialog;
+    procedure BtnProcurarArquivoTextoClick(Sender: TObject);
+    procedure BtnCalcularArquivoClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FTarefa6: TFTarefa6;
+
+const
+  sARQUIVO_NAO_ENCONTRADO = 'Arquivo não encontrado';
+  sLINHA_VAZIA = 'Linha de dados inválida';
+  sVALOR_ALFANUMERICO = 'Valor alfanumérico encontrado';
+
+implementation
+
+{$R *.DFM}
+
+procedure TFTarefa6.BtnProcurarArquivoTextoClick(Sender: TObject);
+begin
+  if opDlgAbrir.Execute then
+    edtArquivoTexto.Text := opDlgAbrir.FileName;
+end;
+
+procedure TFTarefa6.BtnCalcularArquivoClick(Sender: TObject);
+var
+  oLista: TStringList;
+  i, j, iTotal: integer;
+  sLinha: string;
+begin
+  oLista := TStringList.Create;
+  try
+    try
+      iTotal := 0;
+      oLista.LoadFromFile(edtArquivoTexto.Text);
+      for i := 0 to oLista.Count - 1 do
+      begin
+        if (Trim(oLista[i]) = '') then
+          raise(ELinhaDadosVazia.Create(sLINHA_VAZIA))
+        else
+        begin
+          sLinha := Trim(oLista[i]);
+        //  for j := 1 to Length(sLinha) do
+            iTotal := iTotal + StrToInt(sLinha); //iTotal := iTotal + StrToInt(sLinha[j]);
+        end;
+      end;
+    except
+      on E: ElinhaDadosVazia do
+      begin
+        raise;
+      end;
+
+      on E: EFOpenError do
+      begin
+        raise(EArquivoNaoEncontrado.Create(sARQUIVO_NAO_ENCONTRADO));
+      end;
+
+      on E: EConvertError do
+      begin
+        raise Exception.Create(sVALOR_ALFANUMERICO);
+      end;
+
+      on E: Exception do
+      begin
+        raise exception.Create('Ocorreu uma falha no sistema: ' + E.Message +
+          #13 + 'Característica: ' + E.ClassName);
+      end;
+    end;
+  finally
+    FreeAndNil(oLista);
+  end;
+
+  edtValorCalculado.Text := IntToStr(iTotal);
+end;
+
+end.

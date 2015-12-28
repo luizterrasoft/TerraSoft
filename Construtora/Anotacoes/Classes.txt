@@ -1,0 +1,5 @@
+unVariaveis - Armazena todas as variaveis globais que serão utilizadas no projeto.
+unConstantes- Armazena todas as constantes globais que serão utilizadas no projeto.
+unFuncoes - Armazena todas as funcoes mais utilizadas no projeto inteiro.
+unDados - Realiza as ações de Inserção, Alteração, Deleção e Seleção no banco de dados.
+unConexao - Classe que efetua a conexão com o banco de dados.

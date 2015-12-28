@@ -1,0 +1,99 @@
+unit unPrincipal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus;
+
+type
+  TfrmPrincipal = class(TForm)
+    MnMnuPrincipal: TMainMenu;
+    Cadastros1: TMenuItem;
+    Movimentaes1: TMenuItem;
+    Atendentes1: TMenuItem;
+    Leitores1: TMenuItem;
+    Livros1: TMenuItem;
+    Emprestimos1: TMenuItem;
+    Sair1: TMenuItem;
+    Ajuda1: TMenuItem;
+    Sobreosistema1: TMenuItem;
+    procedure Livros1Click(Sender: TObject);
+    procedure Atendentes1Click(Sender: TObject);
+    procedure Leitores1Click(Sender: TObject);
+    procedure Emprestimos1Click(Sender: TObject);
+    procedure Sair1Click(Sender: TObject);
+    procedure Sobreosistema1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+
+implementation
+
+uses unConsultaLivros, unConsultaAtendentes, unConsultaLeitores,
+  unConsultaEmprestimos, unLogin, unSobre;
+
+{$R *.dfm}
+
+procedure TfrmPrincipal.Livros1Click(Sender: TObject);
+begin
+  try
+    frmConsultaLivros := TfrmConsultaLivros.Create(self);
+    frmConsultaLivros.ShowModal;
+  finally
+    FreeAndNil(frmConsultaLivros);
+  end;
+end;
+
+procedure TfrmPrincipal.Atendentes1Click(Sender: TObject);
+begin
+  try
+    frmConsultaAtendentes := TfrmConsultaAtendentes.Create(self);
+    frmConsultaAtendentes.ShowModal;
+  finally
+    FreeAndNil(frmConsultaAtendentes);
+  end;
+end;
+
+procedure TfrmPrincipal.Leitores1Click(Sender: TObject);
+begin
+  try
+    frmConsultaLeitores := TfrmConsultaLeitores.Create(self);
+    frmConsultaLeitores.ShowModal;
+  finally
+    FreeAndNil(frmConsultaLeitores);
+  end;
+end;
+
+procedure TfrmPrincipal.Emprestimos1Click(Sender: TObject);
+begin
+  try
+    frmConsultaEmprestimos := TfrmConsultaEmprestimos.Create(self);
+    frmConsultaEmprestimos.ShowModal;
+  finally
+    FreeAndNil(frmConsultaEmprestimos);
+  end;
+end;
+
+procedure TfrmPrincipal.Sair1Click(Sender: TObject);
+begin
+  if (MessageDlg('Tem certeza que deseja fechar o sistema?',mtConfirmation,[mbYes,mbNo],0)=mrYes) then
+    Application.Terminate;
+end;
+
+procedure TfrmPrincipal.Sobreosistema1Click(Sender: TObject);
+begin
+  try
+    frmSobre := TfrmSobre.Create(self);
+    frmSobre.ShowModal;
+  finally
+    FreeAndNil(frmSobre);
+  end;
+end;
+
+end.

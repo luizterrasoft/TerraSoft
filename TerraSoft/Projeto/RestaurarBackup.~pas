@@ -1,0 +1,131 @@
+unit RestaurarBackup;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, IBX.IBServices, StdCtrls;
+
+type
+  TFRestaurarBackup = class(TForm)
+    BTRestaurarBackup: TButton;
+    Button2: TButton;
+    Memo1: TMemo;
+    GroupBox2: TGroupBox;
+    CBDesativarIndices: TCheckBox;
+    CBSemValidar: TCheckBox;
+    CBSemShadow: TCheckBox;
+    IBConfigService1: TIBConfigService;
+    IBRestoreService1: TIBRestoreService;
+    CBDetalhes: TCheckBox;
+    OpenDialog1: TOpenDialog;
+    CBUmaTabela: TCheckBox;
+    CBSubstituir: TCheckBox;
+    procedure BTRestaurarBackupClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRestaurarBackup: TFRestaurarBackup;
+
+implementation
+
+uses Principal, unDM;
+
+{$R *.dfm}
+
+procedure TFRestaurarBackup.BTRestaurarBackupClick(Sender: TObject);
+begin
+  try	
+    if not OpenDialog1.Execute then//se não selecionar o arquivo de backup
+      Exit;                        //cancela o procedimento
+    Memo1.Clear;
+    BTRestaurarBackup.Enabled:=False;
+    Memo1.Lines.Add('Preparando para restaurar o backup...');
+    Memo1.Lines.Add('');
+
+    with IBRestoreService1 do
+    begin
+      DM.Con.Connected:=False;//desconecta da base
+      DatabaseName.Clear;
+      DatabaseName.Add(frmBackup.EBase.Text);//caminho da base
+      ServerName:=frmBackup.EServ.Text;//nome do servidor
+      BackupFile.Clear;
+      BackupFile.Add(OpenDialog1.FileName);//caminho do arquivo de backup
+      Protocol:=TCP;//protocolo de conexão
+      Params.Clear;
+      Params.Add('user_name=SYSDBA');//nome de usuário
+      Params.Add('password=masterkey');//senha do usuário
+
+      Options:=[];
+      Options:=[CreateNewDB];
+      {o bloco de if abaixo esta adicionando as opções de restauração de acordo com o que o usuário escolheu.
+      Após esta listagem você encontra um link para um outro artigo onde você encontra mais informações
+      sobre essas e outras opções de restauração}
+      if CBDesativarIndices.Checked then
+        Options:=Options+[DeactivateIndexes];
+      if CBSemShadow.Checked then
+        Options:=Options+[NoShadow];
+      if CBSemValidar.Checked then
+        Options:=Options+[NoValidityCheck];
+      if CBUmaTabela.Checked then
+        Options:=Options+[OneRelationAtATime];
+      if CBSubstituir.Checked then
+        Options:=Options+[Replace];
+
+      {a propriedade verbose do TIBRestoreService especifica
+      se durante o processo de restauração será retornado para a
+      aplicação o detalhamento da execução}
+      Verbose:=CBDetalhes.Checked;
+
+      Memo1.Lines.Add('  Desativar indices: '+BoolToStr(CBDesativarIndices.Checked));
+      Memo1.Lines.Add('  Restaurar arquivo espelho: '+BoolToStr(not CBSemShadow.Checked));
+      Memo1.Lines.Add('  Validar regras de integridade: '+BoolToStr(not CBSemValidar.Checked));
+      Memo1.Lines.Add('  Restaurar uma tabela por vez: '+BoolToStr(CBUmaTabela.Checked));
+      Memo1.Lines.Add('  Nome do servidor: '+ServerName);
+      Memo1.Lines.Add('');
+      Active:=True;//ativa o servico de restauração, mais ainda nao inicia.
+      Memo1.Lines.Add('');
+      Memo1.Lines.Add('/***INICIO***\');
+      Application.ProcessMessages;
+      Memo1.Lines.Add('');
+      try
+        ServiceStart;//inicia o restore
+        while not Eof do
+        begin
+          {assim como no backup, conforme a restauração vai sendo executada
+          os detalhes da execução podem ser lidos através da função GetNextLine}
+          Memo1.Lines.Add(GetNextLine);
+        end;
+      finally
+      end;
+      Active:=False;//desativa o serviço de restore
+      Memo1.Lines.Add('');
+      Memo1.Lines.Add('/****FIM****\');
+    end;
+    Memo1.Lines.Add(''); Memo1.Lines.Add('');
+    Memo1.Lines.Add('Backup restaurado com sucesso.');
+    DM.Con.Connected:=True;//conecta o sistema na base de dados
+    BTRestaurarBackup.Enabled:=True;
+  except
+    on E: Exception do
+    begin
+      Memo1.Lines.Add('Ocorreu um erro inesperado. O restore não foi concluído.');
+      Memo1.Lines.Add('Informações da exceção:');
+      Memo1.Lines.Add('  '+E.Message);
+      DM.Con.Connected :=True;//conecta o sistema na base de dados
+      BTRestaurarBackup.Enabled:=True;
+    end;
+  end;
+end;
+
+procedure TFRestaurarBackup.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

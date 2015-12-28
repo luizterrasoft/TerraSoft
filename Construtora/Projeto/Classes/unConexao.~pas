@@ -1,0 +1,34 @@
+unit unConexao;
+
+interface
+
+uses
+  SysUtils, Classes, DBXpress, DB, SqlExpr, FMTBcd, Provider, DBClient, Dialogs,
+  Forms, unFuncoes, unVariaveis, unConstantes;
+
+type
+  TConexaoBD = class
+
+    private
+      FoConecta: TSQLConnection;
+      constructor Create; 
+
+    public
+      property Conecta: TSQLConnection read FoConecta write FoConecta;
+
+  end;
+
+implementation
+
+{ TConexaoBD }
+
+constructor TConexaoBD.Create;
+begin
+  try
+    FoConecta := TSQLConnection.Create(nil);
+  except
+
+  end;
+end;
+
+end.

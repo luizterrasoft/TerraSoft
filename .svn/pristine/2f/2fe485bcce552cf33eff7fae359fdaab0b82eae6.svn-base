@@ -1,0 +1,591 @@
+unit unFaturamentoOS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, Mask, FMTBcd, DB,
+  SqlExpr, Provider, DBClient, unFuncoes;
+
+type
+  TfrmFaturamentoOS = class(TForm)
+    PnFaturamento: TPanel;
+    Label3: TLabel;
+    lblCondicaoPgto: TLabel;
+    edtCodCondicaoPgto: TEdit;
+    BtnBuscaCondicaoPgto: TBitBtn;
+    PnPrestacoes: TPanel;
+    GrdPrestacoes: TDBGrid;
+    PnAlteracaoParcelas: TPanel;
+    Label2: TLabel;
+    Label4: TLabel;
+    edtValor: TEdit;
+    mskVencimento: TMaskEdit;
+    BtnSair: TBitBtn;
+    BtnGerar: TBitBtn;
+    Label5: TLabel;
+    RdGrpDesconto: TRadioGroup;
+    edtDesconto: TEdit;
+    Label6: TLabel;
+    lblVlrSubTotal: TLabel;
+    lblVlrTotal: TLabel;
+    BtnGravarParcela: TBitBtn;
+    qryAux: TSQLQuery;
+    qryContasReceber: TSQLQuery;
+    dsContasReceber: TDataSource;
+    cdsContasReceber: TClientDataSet;
+    dspContasReceber: TDataSetProvider;
+    cdsAux: TClientDataSet;
+    dspAux: TDataSetProvider;
+    dsAux: TDataSource;
+    BtnAlterarParcela: TBitBtn;
+    lblTipoDesconto: TLabel;
+    qryOS: TSQLQuery;
+    dsOS: TDataSource;
+    cdsOS: TClientDataSet;
+    dspOS: TDataSetProvider;
+    BtnConfirmar: TBitBtn;
+    dsAux2: TDataSource;
+    cdsAux2: TClientDataSet;
+    dspAux2: TDataSetProvider;
+    qryAux2: TSQLQuery;
+    lblTipoCobranca: TLabel;
+    edtCodTipoCobranca: TEdit;
+    BtnBuscaTipoCobranca: TBitBtn;
+    lblResTipoCobranca: TLabel;
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure edtCodFormaPgtoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodCondicaoPgtoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtDescontoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtValorKeyPress(Sender: TObject; var Key: Char);
+    procedure mskVencimentoKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure edtCodCondicaoPgtoEnter(Sender: TObject);
+    procedure edtCodCondicaoPgtoExit(Sender: TObject);
+    procedure edtDescontoExit(Sender: TObject);
+    procedure edtValorExit(Sender: TObject);
+    procedure BtnBuscaFormaPgtoClick(Sender: TObject);
+    procedure BtnBuscaCondicaoPgtoClick(Sender: TObject);
+    procedure edtDescontoEnter(Sender: TObject);
+    procedure BtnGerarClick(Sender: TObject);
+    procedure BtnSairClick(Sender: TObject);
+    procedure BtnAlterarParcelaClick(Sender: TObject);
+    procedure BtnGravarParcelaClick(Sender: TObject);
+    procedure BtnConfirmarClick(Sender: TObject);
+    procedure edtCodPlanoContaKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodTipoCobrancaEnter(Sender: TObject);
+    procedure edtCodTipoCobrancaKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodTipoCobrancaExit(Sender: TObject);
+    procedure BtnBuscaTipoCobrancaClick(Sender: TObject);
+  private
+
+    EAvista: Boolean;
+    loFUncoes: TFuncoes;
+    operacao: integer;
+
+    procedure mostraContas;
+    procedure limpar;
+  public
+
+    QtdParcelas: integer;
+    PrimeiroVcto: integer;
+    IntervaloVcto: integer;  
+    codConta: integer;
+    codCliente: integer;
+    codOS: integer;
+  end;
+
+var
+  frmFaturamentoOS: TfrmFaturamentoOS;
+
+implementation
+
+uses unDM, unFormasPgto, unCondicoesPgto, DateUtils, unIncluirOS, unOS,
+  unPlanoContas, UnSelecaoContaAvista, unPrincipal, unTiposCobrancas;
+
+{$R *.dfm}
+
+procedure TfrmFaturamentoOS.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Self.Close;
+end;
+
+procedure TfrmFaturamentoOS.FormCreate(Sender: TObject);
+begin
+  loFUncoes := TFuncoes.Create;
+end;
+
+procedure TfrmFaturamentoOS.FormDestroy(Sender: TObject);
+begin
+  loFUncoes.Free;
+end;
+
+procedure TfrmFaturamentoOS.edtCodFormaPgtoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtCodCondicaoPgtoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtDescontoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtValorKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.mskVencimentoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.limpar;
+begin
+  edtCodCondicaoPgto.Clear;
+  lblCondicaoPgto.Caption := '';
+  edtDesconto.Text := '0,00';
+  edtValor.Text := '0,00';
+  mskVencimento.Clear;
+  cdsContasReceber.Close;
+end;
+
+procedure TfrmFaturamentoOS.FormShow(Sender: TObject);
+begin
+  limpar;
+end;
+
+procedure TfrmFaturamentoOS.edtCodCondicaoPgtoEnter(Sender: TObject);
+begin
+  lblCondicaoPgto.Caption := '';
+end;
+
+procedure TfrmFaturamentoOS.edtCodCondicaoPgtoExit(Sender: TObject);
+begin
+  if edtCodCondicaoPgto.Text <> trim('') then
+    begin
+      lblCondicaoPgto.Caption := loFuncoes.BuscaFk(edtCodCondicaoPgto.Text,'condicoespgto','descricao');
+      IntervaloVcto := StrToInt(loFUncoes.BuscaFk(edtCodCondicaoPgto.Text,'condicoespgto','DIASENTREPRESTACOES'));
+      PrimeiroVcto  := StrToInt(loFUncoes.BuscaFk(edtCodCondicaoPgto.Text,'condicoespgto','NDIASPRIMEIROVCTO'));
+      QtdParcelas   := StrToInt(loFUncoes.BuscaFk(edtCodCondicaoPgto.Text,'condicoespgto','qtdparcelas'));
+
+      if lblCondicaoPgto.Caption = trim('') then
+        begin
+          edtCodCondicaoPgto.Clear;
+          BtnBuscaCondicaoPgto.SetFocus;
+        end
+      else
+        begin
+          edtCodTipoCobranca.SetFocus;
+        end;
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtDescontoExit(Sender: TObject);
+var
+  SubTotal, Total, Desconto: Real;
+begin
+  lblVlrTotal.Caption     := StringReplace(lblVlrTotal.Caption, '.', '', []);
+  lblVlrSubTotal.Caption  := StringReplace(lblVlrSubTotal.Caption, '.', '', []);
+
+  if RdGrpDesconto.ItemIndex = 0 then
+    begin
+      lblVlrTotal.Caption := FloatToStr( StrToFloat(lblVlrSubTotal.Caption) - StrToFloat(edtDesconto.Text) );
+
+      if (edtDesconto.Text <> trim('')) and (edtDesconto.Text <> trim('0')) then
+        edtDesconto.Text := loFuncoes.TrataReal(edtDesconto.Text);
+    end
+  else
+    begin
+      SubTotal  := StrToFloat(lblVlrSubTotal.Caption);
+      Desconto  := StrToFloat(edtDesconto.Text);
+      Total     := SubTotal - (SubTotal * Desconto / 100);
+      lblVlrTotal.Caption := FloatToStr(Total);
+    end;
+
+  lblVlrTotal.Caption := loFUncoes.TrataReal(lblVlrTotal.Caption);
+end;
+
+procedure TfrmFaturamentoOS.edtValorExit(Sender: TObject);
+begin
+  if (edtValor.Text <> trim('')) and (edtValor.Text <> trim('0')) then
+    edtValor.Text := loFuncoes.TrataReal(edtValor.Text);
+end;
+
+procedure TfrmFaturamentoOS.BtnBuscaFormaPgtoClick(Sender: TObject);
+begin
+  // não está sendo usado por em qnto
+{  frmFormasPgto := TfrmFormasPgto.Create(self);
+  frmFormasPgto.telaChamando := 1;
+  frmFormasPgto.ShowModal;
+  FreeAndNil(frmFormasPgto);
+
+  if lblFormaPgto.Caption <> trim('') then
+    edtCodCondicaoPgto.SetFocus;}
+end;
+
+procedure TfrmFaturamentoOS.BtnBuscaCondicaoPgtoClick(Sender: TObject);
+begin
+  frmCondicoesPgto := TfrmCondicoesPgto.Create(self);
+  frmCondicoesPgto.telaChamando := 1;
+  frmCondicoesPgto.ShowModal;
+  FreeAndNil(frmCondicoesPgto);
+
+  if lblCondicaoPgto.Caption <> trim('') then
+    edtCodTipoCobranca.SetFocus;
+end;
+
+procedure TfrmFaturamentoOS.edtDescontoEnter(Sender: TObject);
+begin
+  if RdGrpDesconto.ItemIndex = 0 then
+    lblTipoDesconto.Caption := 'R$'
+  else
+    lblTipoDesconto.Caption := '%';
+end;
+
+procedure TfrmFaturamentoOS.BtnGerarClick(Sender: TObject);
+var
+  i: integer;
+  DiasVcto: integer;
+  Avista: TDate;
+begin
+  i := 1;
+
+  while i <= QtdParcelas do
+    begin
+
+      if i = 1 then
+        DiasVcto := PrimeiroVcto
+      else
+        DiasVcto := (i * IntervaloVcto);
+
+      // verifica se a parcela é avista
+      Avista := IncDay(Date,DiasVcto);
+
+      if Avista = Date then
+        EAvista := True
+      else
+        EAvista := False;
+
+      with qryContasReceber, SQL do
+        begin
+          try
+            Close;
+            Clear;
+            Add('INSERT INTO contasreceber');
+            Add(' (tipocobranca,emissao,vencimento,valor,codcliente,codos,');
+            Add('status,descricao,numeroparcela');
+
+            if frmPrincipal.iCodUsuario > 0 then
+              Add(',codusuario');
+
+            if EAvista = true then
+              Add(',datarecebimento,valorrecebido)')
+            else
+              Add(')');
+
+
+            Add('VALUES ');
+
+            Add(' (:tpcob,:emi,:venc,:vlr,:codcli,:codos,:sta,:des,:npa');
+
+            if frmPrincipal.iCodUsuario > 0 then
+              Add(',:usu');
+
+            if EAvista = true then
+              Add(',:dtRec,:vlrrec)')
+            else
+              Add(')');
+
+            ParamByName('emi').AsDate   := Date;
+            ParamByName('venc').AsDate  := IncDay(Date,DiasVcto);
+            ParamByName('vlr').AsFloat  := StrToFloat(lblVlrTotal.Caption) / QtdParcelas;
+            ParamByName('codcli').AsInteger := codCliente;
+            ParamByName('codos').AsInteger  := codOS;
+
+            if EAvista then
+              ParamByName('sta').AsString := 'Q'
+            else
+              ParamByName('sta').AsString := 'A';
+
+            ParamByName('des').AsString := 'O.S. Número: '+IntToStr(codOS);
+            ParamByName('npa').AsInteger:= i;
+
+            ParamByName('usu').AsInteger := frmPrincipal.iCodUsuario;
+
+            ParamByName('tpcob').AsString := lblResTipoCobranca.Caption;
+
+            if EAvista = true then
+              begin
+                ParamByName('dtRec').AsDate   := Date;
+                ParamByName('vlrrec').AsFloat := StrToFloat(lblVlrTotal.Caption) / QtdParcelas;
+
+                // chama a tela pra selecionar qual conta vai cair esse avista
+                frmSelecaoContaAvista := TfrmSelecaoContaAvista.Create(self);
+                frmSelecaoContaAvista.tela := 1; // faturamento os
+                frmSelecaoContaAvista.ShowModal;
+                FreeAndNil(frmSelecaoContaAvista);
+
+                qryAux2.Close;
+                qryAux2.SQL.Clear;
+                qryAux2.SQL.Add('SELECT nome FROM clientes');
+                qryAux2.SQL.Add('WHERE codigo = :cod');
+                qryAux2.ParamByName('cod').AsInteger := codCliente;
+                qryAux2.Open;
+                cdsAux2.Close;
+                cdsAux2.Open;
+
+                // lança no caixa - o avista
+                with qryAux, SQL do
+                  begin
+                    Close;
+                    Clear;
+                    Add('INSERT INTO caixa (codconta,valor,descricao,data,tipo)');
+                    Add('VALUES (:conta,:valor,:desc,:data,:tip)');
+                    ParamByName('conta').AsInteger := codConta;
+                    ParamByName('valor').AsFloat   := StrToFloat(lblVlrTotal.Caption) / QtdParcelas;
+                    ParamByName('desc').AsString   := 'RECBTO. A VISTA O.S.: ' + IntToStr(codOs) + ' ' + cdsAux2.FieldByName('nome').AsString;
+                    ParamByName('data').AsDate     := Date;
+                    ParamByName('tip').AsString    := 'C';
+                    ExecSQL();
+                  end;
+              end;
+
+            SQL.SaveToFile('C:\fatos.txt');
+            ExecSQL();
+          except
+            MessageDlg('Erro ao gerar a parcela número '+ IntToStr(i)+ '!',mtError,[mbOk],0);
+          end;
+        end;
+      i := i + 1;
+    end;
+
+  mostraContas;
+
+  with qryOS, SQL do
+    begin
+      try
+        Close;
+        Clear;
+        Add('UPDATE OS SET codcondicaopgto = :cond, datafechada = :dtFech, status = :sta,');
+        Add('desconto = :desc, valortotal = :total');
+        Add('WHERE codigo = :os');
+        ParamByName('os').AsInteger := codOS;
+        ParamByName('cond').AsInteger := StrToInt(edtCodCondicaoPgto.Text);
+        ParamByName('dtFech').AsDate  := Date;
+        ParamByName('sta').AsString   := 'F';
+        ParamByName('desc').AsFloat   := StrToFloat(edtDesconto.Text);
+        ParamByName('total').AsFloat  := StrToFloat(lblVlrSubTotal.Caption) - StrToFloat(edtDesconto.Text);
+        ExecSQL();
+      except
+        MessageDlg('Erro ao fechar a O.S. sendo faturada!',mtError,[mbOk],0);
+      end;
+    end;
+
+  PnFaturamento.Enabled := False;
+end;
+
+procedure TfrmFaturamentoOS.BtnSairClick(Sender: TObject);
+begin
+  with qryContasReceber, SQL do
+    begin
+      Close;
+      Clear;
+      Add('DELETE FROM contasreceber');
+      Add('WHERE codos = :os');
+      ParamByName('os').AsInteger := codOS;
+      ExecSQL();
+    end;
+
+  with qryOS, SQL do
+    begin
+      try
+        Close;
+        Clear;
+        Add('UPDATE OS SET codcondicaopgto = :cond, datafechada = null, status = :sta');
+        Add('WHERE codigo = :os');
+        ParamByName('os').AsInteger := codOS;
+        ParamByName('cond').AsInteger := 0;
+        ParamByName('sta').AsString   := 'A';
+        ExecSQL();
+      except
+        MessageDlg('Erro ao fechar a O.S. sendo faturada!',mtError,[mbOk],0);
+      end;
+    end;
+
+  if EAvista = true then
+    begin
+      with qryOS, SQL do
+        begin
+          Close;
+          Clear;
+          Add('SELECT MAX(codigo) as Codigo FROM caixa');
+          Open;
+          cdsOS.Close;
+          cdsOS.Open;
+        end;
+
+      with qryAux, SQL do
+        begin
+          Close;
+          Clear;
+          Add('DELETE FROM CAIXA');
+          Add('WHERE codigo = :cod');
+          ParamByName('cod').AsInteger := cdsOS.FieldByName('codigo').AsInteger;
+          ExecSQL();
+        end;
+    end;
+
+  Close;
+end;
+
+procedure TfrmFaturamentoOS.BtnAlterarParcelaClick(Sender: TObject);
+begin
+  PnAlteracaoParcelas.Enabled := True;
+  operacao := 1;
+  codConta := cdsContasReceber.FieldByName('codigo').AsInteger;
+
+  edtValor.Text := cdsContasReceber.FieldBYname('valor').AsString;
+  mskVencimento.Text := cdsContasReceber.FieldByName('vencimento').AsString;
+  PnAlteracaoParcelas.Enabled := True;
+  mskVencimento.SetFocus;
+end;
+
+procedure TfrmFaturamentoOS.BtnGravarParcelaClick(Sender: TObject);
+begin
+
+  if (operacao = 1) and (cdsContasReceber.FieldByName('codigo').AsInteger > 0) then
+    begin
+      with qryContasReceber, SQL do
+        begin
+          try
+            Close;
+            Clear;
+            Add('UPDATE contasreceber SET vencimento = :vcto, valor = :vlr');
+            Add('WHERE codigo = :cr');
+            ParamByName('cr').AsInteger := codConta;
+            ParamByName('vcto').AsDate  := StrToDate(mskVencimento.Text);
+            ParamByName('vlr').AsFloat  := StrToFloat(edtValor.Text);
+            ExecSQL();
+          except
+            MessageDlg('Erro ao alterar a parcela!',mtError,[mbOk],0);
+          end;
+        end;
+
+      operacao := 0;
+    end;
+
+  mostraContas;
+  PnAlteracaoParcelas.Enabled := False;
+
+end;
+
+
+procedure TfrmFaturamentoOS.mostraContas;
+begin
+  with qryContasReceber, SQL do
+    begin
+      Close;
+      Clear;
+      Add('SELECT * FROM contasreceber WHERE codos = :os');
+      ParamByName('os').AsInteger := codOS;
+      Open;
+      cdsContasReceber.Close;
+      cdsContasReceber.Open;
+
+      TNumericField(cdsContasReceber.FieldByName('valor')).DisplayFormat := ',0.00;-,0.00';
+    end;
+end;
+
+procedure TfrmFaturamentoOS.BtnConfirmarClick(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmFaturamentoOS.edtCodPlanoContaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtCodTipoCobrancaEnter(Sender: TObject);
+begin
+  lblResTipoCobranca.Caption := '';
+end;
+
+procedure TfrmFaturamentoOS.edtCodTipoCobrancaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmFaturamentoOS.edtCodTipoCobrancaExit(Sender: TObject);
+begin
+  if edtCodTipoCobranca.Text <> trim('') then
+    begin
+      lblResTipoCobranca.Caption := loFuncoes.BuscaFk(edtCodTipoCobranca.Text,'tipocobranca','descricao');
+
+      if lblResTipoCobranca.Caption = trim('') then
+        begin
+          edtCodTipoCobranca.Clear;
+          BtnBuscaTipoCobranca.SetFocus;
+        end
+      else
+        edtDesconto.SetFocus;
+    end;
+end;
+
+procedure TfrmFaturamentoOS.BtnBuscaTipoCobrancaClick(Sender: TObject);
+begin
+  frmTiposCobrancas := TfrmTiposCobrancas.Create(self);
+  frmTiposCobrancas.telaChamando := 1;
+  frmTiposCobrancas.ShowModal;
+  FreeAndNil(frmTiposCobrancas);
+
+  if lblResTipoCobranca.Caption <> trim('') then
+    edtDesconto.SetFocus;
+end;
+
+end.

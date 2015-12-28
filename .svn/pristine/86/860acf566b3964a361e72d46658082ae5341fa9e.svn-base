@@ -1,0 +1,20 @@
+object frmBusca: TfrmBusca
+  Left = 192
+  Top = 146
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'frmBusca'
+  ClientHeight = 630
+  ClientWidth = 1287
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 120
+  TextHeight = 16
+end

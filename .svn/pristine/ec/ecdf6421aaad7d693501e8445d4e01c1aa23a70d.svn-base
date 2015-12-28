@@ -1,0 +1,72 @@
+unit unAbastecimentos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Mask, Grids, DBGrids, FMTBcd,
+  SqlExpr, Provider, DB, DBClient;
+
+type
+  TfrmAbastecimentos = class(TForm)
+    PnConsulta: TPanel;
+    PnAbastecimentos: TPanel;
+    PnBotoes: TPanel;
+    Label1: TLabel;
+    edtCodTipoCombustivel: TEdit;
+    BtnBuscaTipoCombustivel: TBitBtn;
+    Label2: TLabel;
+    lblTipoCombustivel: TLabel;
+    edtCodEquipamento: TEdit;
+    BtnBuscaEquipamento: TBitBtn;
+    lblEquipamento: TLabel;
+    Label3: TLabel;
+    edtCodFornecedor: TEdit;
+    BtnBuscaFornecedor: TBitBtn;
+    lblFornecedor: TLabel;
+    Label4: TLabel;
+    edtCodFuncionario: TEdit;
+    BtnBuscaFuncionario: TBitBtn;
+    lblFuncionario: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    mskInicial: TMaskEdit;
+    mskFinal: TMaskEdit;
+    BtnConsultar: TBitBtn;
+    BtnRelatorio: TBitBtn;
+    BtnIncluir: TBitBtn;
+    BtnVisualizar: TBitBtn;
+    BtnExcluir: TBitBtn;
+    BtnMarcar: TBitBtn;
+    BtnSair: TBitBtn;
+    GrdAbastecimentos: TDBGrid;
+    BtnDesmarcar: TBitBtn;
+    BtnMarcarTodos: TBitBtn;
+    BtnDesmarcarTodos: TBitBtn;
+    BtnFechar: TBitBtn;
+    dsAbastecimentos: TDataSource;
+    cdsAbastecimentos: TClientDataSet;
+    dspAbastecimentos: TDataSetProvider;
+    qryAbastecimentos: TSQLQuery;
+    procedure BtnSairClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAbastecimentos: TfrmAbastecimentos;
+
+implementation
+
+uses unDM;
+
+{$R *.dfm}
+
+procedure TfrmAbastecimentos.BtnSairClick(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+end.

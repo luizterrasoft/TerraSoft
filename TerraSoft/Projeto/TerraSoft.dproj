@@ -1,0 +1,411 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{E1BC503D-B836-4787-A6D5-2D211B413697}</ProjectGuid>
+        <MainSource>TerraSoft.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <TargetedPlatforms>1025</TargetedPlatforms>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <ProjectVersion>17.2</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_UsePackage>vcl;rtl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;VclSmp;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;vclshlctrls;IntrawebDB_50_70;Intraweb_50_70;Rave50CLX;Rave50VCL;dclOfficeXP;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_E>false</DCC_E>
+        <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+        <DCC_F>false</DCC_F>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_N>true</DCC_N>
+        <DCC_DebugInformation>1</DCC_DebugInformation>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1046</VerInfo_Locale>
+        <SanitizedProjectName>TerraSoft</SanitizedProjectName>
+        <DCC_K>false</DCC_K>
+        <DCC_S>false</DCC_S>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <Icon_MainIcon>TerraSoft_Icon.ico</Icon_MainIcon>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Icon_MainIcon>TerraSoft_Icon.ico</Icon_MainIcon>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_Optimize>false</DCC_Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="unPrincipal.pas">
+            <Form>frmPrincipal</Form>
+        </DCCReference>
+        <DCCReference Include="unConsultas.pas">
+            <Form>frmConsultas</Form>
+        </DCCReference>
+        <DCCReference Include="unDM.pas">
+            <Form>DM</Form>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UnClientes.pas">
+            <Form>frmClientes</Form>
+        </DCCReference>
+        <DCCReference Include="unCadastros.pas">
+            <Form>frmCadastros</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirCliente.pas">
+            <Form>frmIncluirCliente</Form>
+        </DCCReference>
+        <DCCReference Include="unFuncoes.pas"/>
+        <DCCReference Include="unMunicipios.pas">
+            <Form>frmMunicipios</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirMunicipio.pas">
+            <Form>frmIncluirMunicipio</Form>
+        </DCCReference>
+        <DCCReference Include="unRegioes.pas">
+            <Form>frmRegioes</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirRegioes.pas">
+            <Form>frmIncluirRegioes</Form>
+        </DCCReference>
+        <DCCReference Include="unFornecedores.pas">
+            <Form>frmFornecedores</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirFornecedor.pas">
+            <Form>frmIncluirFornecedor</Form>
+        </DCCReference>
+        <DCCReference Include="unFuncionarios.pas">
+            <Form>frmFuncionarios</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirFuncionario.pas">
+            <Form>frmIncluirFuncionario</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirProduto.pas">
+            <Form>frmIncluirProduto</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirServico.pas">
+            <Form>frmIncluirServico</Form>
+        </DCCReference>
+        <DCCReference Include="unServicos.pas">
+            <Form>frmServicos</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirEquipamento.pas">
+            <Form>frmIncluirEquipamento</Form>
+        </DCCReference>
+        <DCCReference Include="unEquipamentos.pas">
+            <Form>frmEquipamentos</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirFormaPgto.pas">
+            <Form>frmIncluirFormaPgto</Form>
+        </DCCReference>
+        <DCCReference Include="unFormasPgto.pas">
+            <Form>frmFormasPgto</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirCondicaoPgto.pas">
+            <Form>frmIncluirCondicaoPgto</Form>
+        </DCCReference>
+        <DCCReference Include="unCondicoesPgto.pas">
+            <Form>frmCondicoesPgto</Form>
+        </DCCReference>
+        <DCCReference Include="unOS.pas">
+            <Form>frmOS</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirOS.pas">
+            <Form>frmIncluirOS</Form>
+        </DCCReference>
+        <DCCReference Include="unFaturamentoOS.pas">
+            <Form>frmFaturamentoOS</Form>
+        </DCCReference>
+        <DCCReference Include="unContasReceber.pas">
+            <Form>frmContasReceber</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirContasReceber.pas">
+            <Form>frmIncluirContasReceber</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirPlanoContas.pas">
+            <Form>frmIncluirPlanoContas</Form>
+        </DCCReference>
+        <DCCReference Include="unPlanoContas.pas">
+            <Form>frmPlanoContas</Form>
+        </DCCReference>
+        <DCCReference Include="unQuitarContaReceber.pas">
+            <Form>frmQuitarContaReceber</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirConta.pas">
+            <Form>frmIncluirConta</Form>
+        </DCCReference>
+        <DCCReference Include="unContas.pas">
+            <Form>frmContas</Form>
+        </DCCReference>
+        <DCCReference Include="unHistoricoContaReceber.pas">
+            <Form>frmHistoricoContaReceber</Form>
+        </DCCReference>
+        <DCCReference Include="unCaixa.pas">
+            <Form>frmCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirCaixa.pas">
+            <Form>frmIncluirCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="UnSelecaoContaAvista.pas">
+            <Form>frmSelecaoContaAvista</Form>
+        </DCCReference>
+        <DCCReference Include="unManutencoes.pas">
+            <Form>frmManutencoes</Form>
+        </DCCReference>
+        <DCCReference Include="unFaturamentoManu.pas">
+            <Form>frmFaturamentoManu</Form>
+        </DCCReference>
+        <DCCReference Include="unAgendaManu.pas">
+            <Form>frmAgendaManu</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirAgendamento.pas">
+            <Form>frmIncluirAgendamento</Form>
+        </DCCReference>
+        <DCCReference Include="unConsultaManutencoes.pas">
+            <Form>frmConsultaManutencoes</Form>
+        </DCCReference>
+        <DCCReference Include="unContasPagar.pas">
+            <Form>frmContasPagar</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirContasPagar.pas">
+            <Form>frmIncluirContasPagar</Form>
+        </DCCReference>
+        <DCCReference Include="unQuitarContaPagar.pas">
+            <Form>frmQuitarContaPagar</Form>
+        </DCCReference>
+        <DCCReference Include="unHistoricoContaPagar.pas">
+            <Form>frmHistoricoContaPagar</Form>
+        </DCCReference>
+        <DCCReference Include="unSelecaoRelatorios.pas">
+            <Form>frmSelecaoRelatorios</Form>
+        </DCCReference>
+        <DCCReference Include="unSelecaoRelFornecedores.pas">
+            <Form>frmSelecaoRelFornecedores</Form>
+        </DCCReference>
+        <DCCReference Include="unRelContasPagar.pas">
+            <Form>frmRelContasPagar</Form>
+        </DCCReference>
+        <DCCReference Include="unRelContasReceber.pas">
+            <Form>frmRelContasReceber</Form>
+        </DCCReference>
+        <DCCReference Include="unRelOS.pas">
+            <Form>frmRelOS</Form>
+        </DCCReference>
+        <DCCReference Include="unRelacaoOS.pas">
+            <Form>frmRelacaoOS</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirSubPlanoContas.pas">
+            <Form>frmIncluirSubPlanoContas</Form>
+        </DCCReference>
+        <DCCReference Include="unSubPlanosdeContas.pas">
+            <Form>frmSubPlanosdeContas</Form>
+        </DCCReference>
+        <DCCReference Include="unReciboCR.pas">
+            <Form>frmReciboCR</Form>
+        </DCCReference>
+        <DCCReference Include="unRelCaixa.pas">
+            <Form>frmRelCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="unSobre.pas">
+            <Form>frmSobre</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirEmpresa.pas">
+            <Form>frmIncluirEmpresa</Form>
+        </DCCReference>
+        <DCCReference Include="unEmpresas.pas">
+            <Form>frmEmpresa</Form>
+        </DCCReference>
+        <DCCReference Include="unReciboCP.pas">
+            <Form>frmReciboCP</Form>
+        </DCCReference>
+        <DCCReference Include="unConfiguracoes.pas">
+            <Form>frmConfiguracoes</Form>
+        </DCCReference>
+        <DCCReference Include="unLavacoes.pas">
+            <Form>frmLavacoes</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirLavacao.pas">
+            <Form>frmIncluirLavacao</Form>
+        </DCCReference>
+        <DCCReference Include="unRenegociarCP.pas">
+            <Form>frmRenegociarCP</Form>
+        </DCCReference>
+        <DCCReference Include="unRenegociarCR.pas">
+            <Form>frmRenegociarCR</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirTipoCobranca.pas">
+            <Form>frmIncluirTipoCobranca</Form>
+        </DCCReference>
+        <DCCReference Include="unTiposCobrancas.pas">
+            <Form>frmTiposCobrancas</Form>
+        </DCCReference>
+        <DCCReference Include="unEntradasCompras.pas">
+            <Form>frmEntradasCompras</Form>
+        </DCCReference>
+        <DCCReference Include="unVisualizarFatManu.pas">
+            <Form>frmVisualizarFatManu</Form>
+        </DCCReference>
+        <DCCReference Include="unRelatoriosManutencoes.pas">
+            <Form>frmRelatoriosManutencoes</Form>
+        </DCCReference>
+        <DCCReference Include="unRelEquipamentos.pas">
+            <Form>frmRelEquipamentos</Form>
+        </DCCReference>
+        <DCCReference Include="GerarBackup.pas">
+            <Form>FGerarBackup</Form>
+        </DCCReference>
+        <DCCReference Include="Principal.pas">
+            <Form>frmBackup</Form>
+        </DCCReference>
+        <DCCReference Include="RestaurarBackup.pas">
+            <Form>FRestaurarBackup</Form>
+        </DCCReference>
+        <DCCReference Include="unUsuarios.pas">
+            <Form>frmUsuarios</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirUsuario.pas">
+            <Form>frmIncluirUsuario</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirTela.pas">
+            <Form>frmIncluirTela</Form>
+        </DCCReference>
+        <DCCReference Include="unBotoes.pas">
+            <Form>frmBotoes</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirBotao.pas">
+            <Form>frmIncluirBotao</Form>
+        </DCCReference>
+        <DCCReference Include="unTelas.pas">
+            <Form>frmTelas</Form>
+        </DCCReference>
+        <DCCReference Include="unPermissoesUsuarios.pas">
+            <Form>frmPermissoesUsuarios</Form>
+        </DCCReference>
+        <DCCReference Include="unOrdensParcelaOrigem.pas">
+            <Form>frmOrdensParcelaOrigem</Form>
+        </DCCReference>
+        <DCCReference Include="unLogin.pas">
+            <Form>frmLogin</Form>
+        </DCCReference>
+        <DCCReference Include="unTransferenciaCaixa.pas">
+            <Form>frmTransferenciaCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="unServicosRealizadosPorFuncionario.pas">
+            <Form>frmServicosRealizadosPorFuncionario</Form>
+        </DCCReference>
+        <DCCReference Include="unRelServicosRealizadosPorFuncionario.pas">
+            <Form>frmRelServicosRealizadosPorFuncionario</Form>
+        </DCCReference>
+        <DCCReference Include="unProdutos.pas">
+            <Form>frmProdutos</Form>
+        </DCCReference>
+        <DCCReference Include="unConstTelas.pas"/>
+        <DCCReference Include="unSelRelServicosEquipamentos.pas">
+            <Form>frmSelRelServicosEquipamentos</Form>
+        </DCCReference>
+        <DCCReference Include="unRelServicosRealizadosPorEquipamento.pas">
+            <Form>frmRelServicosRealizadosPorEquipamento</Form>
+        </DCCReference>
+        <DCCReference Include="unCreditosCliente.pas">
+            <Form>frmCreditosCliente</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirCreditosCliente.pas">
+            <Form>frmIncluirCreditosCliente</Form>
+        </DCCReference>
+        <DCCReference Include="unAbastecimentos.pas">
+            <Form>frmAbastecimentos</Form>
+        </DCCReference>
+        <DCCReference Include="unTiposCombustiveis.pas">
+            <Form>frmTiposCombustiveis</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirTipoCombustivel.pas">
+            <Form>frmIncluirTipoCombustivel</Form>
+        </DCCReference>
+        <DCCReference Include="unIncluirAbastecimento.pas">
+            <Form>frmIncluirAbastecimento</Form>
+        </DCCReference>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">TerraSoft.dpr</Source>
+                </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k220.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp220.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k220.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp220.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <Platforms>
+                <Platform value="iOSDevice64">True</Platform>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>

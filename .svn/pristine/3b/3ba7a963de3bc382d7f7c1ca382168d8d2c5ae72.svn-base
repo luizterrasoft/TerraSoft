@@ -1,0 +1,20 @@
+unit uFila;
+
+interface
+
+type
+  TFila = class
+
+  private
+    FoFila: Variant;
+
+  public
+    constructor Create;
+
+    procedure InsereItem(psItem: String);
+    function RemoveItem: String;
+    function TotalItens: Integer;
+
+implementation
+
+end.

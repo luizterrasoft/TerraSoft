@@ -1,0 +1,24 @@
+unit ufTarefa7;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TfrmTarefa7 = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmTarefa7: TfrmTarefa7;
+
+implementation
+
+{$R *.dfm}
+
+end.

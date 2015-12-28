@@ -1,0 +1,19 @@
+program Construtora;
+
+uses
+  Forms,
+  unPrincipal in 'Forms\unPrincipal.pas' {frmPrincipal},
+  unVariaveis in 'Classes\unVariaveis.pas',
+  unConstantes in 'Classes\unConstantes.pas',
+  unFuncoes in 'Classes\unFuncoes.pas',
+  unValidacoes in 'Classes\unValidacoes.pas',
+  unDados in 'Classes\unDados.pas',
+  unConexao in 'Classes\unConexao.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.Run;
+end.

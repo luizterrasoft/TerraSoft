@@ -1,0 +1,56 @@
+unit unDM;
+
+interface
+
+uses
+  SysUtils, Classes, DBXpress, DB, SqlExpr, Forms;
+
+type
+  TDM = class(TDataModule)
+    Conexao: TSQLConnection;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    procedure Conectar;
+  public
+    Default: string;
+  end;
+
+var
+  DM: TDM;
+
+implementation
+
+{$R *.dfm}
+
+{ TDM }
+
+procedure TDM.Conectar;
+var
+  Arquivo: TextFile;
+  Caminho: string;
+begin
+  assignfile (arquivo, default+'\Config.ini');
+  reset (arquivo);
+  readln (arquivo, caminho);
+  CloseFile(arquivo);
+  Conexao.Params.Values['Database']:=caminho;
+  try
+    Conexao.Connected:=true;
+  except
+    on e: Exception do
+      begin
+        raise Exception.Create('Não foi possivel conectar ao banco de dados!' + e.Message);
+        Application.Terminate;
+      end;
+  end;
+
+end;
+
+procedure TDM.DataModuleCreate(Sender: TObject);
+begin
+  Default := ExtractFileDir(Application.Exename);
+  if FileExists(default+'\Config.ini') then
+    Conectar;
+end;
+
+end.

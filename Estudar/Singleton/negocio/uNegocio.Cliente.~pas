@@ -1,0 +1,69 @@
+unit uNegocio.Cliente;
+
+interface
+
+uses
+  SysUtils;
+
+type
+  TCliente = class
+
+    private
+      FCIC: string;
+      FNome: string;
+      FEndereco: string;
+      FNumeroEnd: string;
+      FBairro: string;
+      FUF: string;
+      FCEP: string;
+      FCidade: string;
+
+    public
+      property CIC: string read FCIC write FCIC;
+      property Nome: string read FNome write FNome;
+      property Endereco: string read FEndereco write FEndereco;
+      property NumeroEnd: string read FNumeroEnd write FNumeroEnd;
+      property Bairro: string read FBairro write FBairro;
+      property UF: string read FUF write FUF;
+      property CEP: string read FCEP write FCEP;
+      property Cidade: string read FCidade write FCidade;
+
+  end;
+
+  TClienteList = class(TObject)
+
+  protected
+    procedure SetObject(Index: integer; Item: TCliente);
+    function getObject(Index: integer): TCliente;
+
+  public
+    function Add(Obj: TCliente): integer;
+    procedure Insert(Index: integer; Obj: TCliente);
+    property Objects [index: Integer]: TCliente read getObject write SetObject; default;
+  end;
+
+implementation
+
+{ TClienteList }
+
+function TClienteList.Add(Obj: TCliente): integer;
+begin
+
+end;
+
+function TClienteList.getObject(Index: integer): TCliente;
+begin
+
+end;
+
+procedure TClienteList.Insert(Index: integer; Obj: TCliente);
+begin
+
+end;
+
+procedure TClienteList.SetObject(Index: integer; Item: TCliente);
+begin
+
+end;
+
+end.

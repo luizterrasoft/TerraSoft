@@ -1,0 +1,259 @@
+unit unCondicoesPgto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unConsultas, FMTBcd, Provider, DBClient, DB, SqlExpr, StdCtrls,
+  Buttons, ExtCtrls, Grids, DBGrids, unFuncoes;
+
+type
+  TfrmCondicoesPgto = class(TfrmConsultas)
+    Bevel1: TBevel;
+    RdBtnCodigo: TRadioButton;
+    RdBtnDescricao: TRadioButton;
+    GrdCondicoesPgto: TDBGrid;
+    qryAux: TSQLQuery;
+    dsAux: TDataSource;
+    cdsAux: TClientDataSet;
+    dspAux: TDataSetProvider;
+    procedure FormShow(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure GrdCondicoesPgtoDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure GrdCondicoesPgtoDblClick(Sender: TObject);
+    procedure edtConsultaKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure GrdCondicoesPgtoKeyPress(Sender: TObject; var Key: Char);
+    procedure GrdCondicoesPgtoTitleClick(Column: TColumn);
+  private
+
+    loFuncoes: TFuncoes;
+    procedure carregaDados; override;
+  public
+    telaChamando: integer;
+  end;
+
+var
+  frmCondicoesPgto: TfrmCondicoesPgto;
+
+implementation
+
+uses unIncluirCondicaoPgto, unIncluirOS, unFaturamentoOS, unManutencoes,
+  unFaturamentoManu, unDM, unRenegociarCP, unRenegociarCR, unPrincipal;
+
+{$R *.dfm}
+
+{ TfrmCondicoesPgto }
+
+procedure TfrmCondicoesPgto.carregaDados;
+begin
+  inherited;
+  with cdsDados do
+    begin
+      with frmIncluirCondicaoPgto do
+        begin
+          edtCodigo.Text              := FieldByName('codigo').AsString;
+          edtDescricao.Text           := FieldByName('descricao').AsString;
+          edtQtdParcelas.Text         := FieldByName('qtdparcelas').AsString;
+          edtDiasEntrePrestacoes.Text := FieldByName('diasentreprestacoes').AsString;
+          edtDias1Vcto.Text           := FieldByName('ndiasprimeirovcto').AsString;
+        end;
+    end;
+end;
+
+procedure TfrmCondicoesPgto.FormShow(Sender: TObject);
+begin
+  frmPrincipal.sCampo := 'DESCRICAO';
+
+  sSQL := 'SELECT * FROM condicoespgto ORDER BY '+frmPrincipal.sCampo;
+
+  inherited;
+
+end;
+
+procedure TfrmCondicoesPgto.BtnIncluirClick(Sender: TObject);
+begin
+  inherited;
+  frmIncluirCondicaoPgto := TfrmIncluirCondicaoPgto.Create(self);
+  frmIncluirCondicaoPgto.ShowModal;
+  FreeAndNil(frmIncluirCondicaoPgto);
+  mostraTodos;
+end;
+
+procedure TfrmCondicoesPgto.GrdCondicoesPgtoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+ if State = [] then
+  begin
+    if cdsDados.RecNo mod 2 = 1 then
+      GrdCondicoesPgto.Canvas.Brush.Color := clMoneyGreen
+    else
+      GrdCondicoesPgto.Canvas.Brush.Color := clWhite;
+  end;
+  GrdCondicoesPgto.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+end;
+
+procedure TfrmCondicoesPgto.GrdCondicoesPgtoDblClick(Sender: TObject);
+begin
+  inherited;
+  if telaChamando <> 0 then
+    begin
+      if telaChamando = 1 then // faturamento os
+        begin
+          frmFaturamentoOS.edtCodCondicaoPgto.Text := cdsDados.FieldByNAme('codigo').AsString;
+          frmFaturamentoOS.lblCondicaoPgto.Caption := cdsDados.FieldBYName('descricao').AsString;
+          frmFaturamentoOS.IntervaloVcto := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','DIASENTREPRESTACOES'));
+          frmFaturamentoOS.PrimeiroVcto  := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','NDIASPRIMEIROVCTO'));
+          frmFaturamentoOS.QtdParcelas   := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','qtdparcelas'));
+        end;
+
+      if telaChamando = 2 then // fechamento cntas pagar manutencao
+        begin
+          frmFaturamentoManu.edtCodCondPgto.Text := cdsDados.FieldByName('codigo').AsString;
+          frmFaturamentoManu.lblCondicaoPgto.Caption := cdsDados.FieldByName('descricao').AsString;
+          frmFaturamentoManu.IntervaloVcto := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','DIASENTREPRESTACOES'));
+          frmFaturamentoManu.PrimeiroVcto  := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','NDIASPRIMEIROVCTO'));
+          frmFaturamentoManu.QtdParcelas   := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','qtdparcelas'));
+        end;
+
+      if telaChamando = 3 then // refaturamento contas pagar
+        begin
+          frmRenegociarCP.edtCodCondPgto.Text := cdsDados.FieldByName('codigo').AsString;
+          frmRenegociarCP.lblCondicaoPgto.Caption := cdsDados.FieldByName('descricao').AsString;
+          frmRenegociarCP.IntervaloVcto := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','DIASENTREPRESTACOES'));
+          frmRenegociarCP.PrimeiroVcto  := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','NDIASPRIMEIROVCTO'));
+          frmRenegociarCP.QtdParcelas   := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','qtdparcelas'));
+        end;
+
+      if telaChamando = 4 then // refaturamento contas receber
+        begin
+          frmRenegociarCR.edtCodCondPgto.Text := cdsDados.FieldByName('codigo').AsString;
+          frmRenegociarCR.lblCondicaoPgto.Caption := cdsDados.FieldByName('descricao').AsString;
+          frmRenegociarCR.IntervaloVcto := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','DIASENTREPRESTACOES'));
+          frmRenegociarCR.PrimeiroVcto  := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','NDIASPRIMEIROVCTO'));
+          frmRenegociarCR.QtdParcelas   := StrToInt(loFUncoes.BuscaFk(cdsDados.FieldByNAme('codigo').AsString,'condicoespgto','qtdparcelas'));
+        end;
+
+      Self.Close;
+    end
+  else
+    BtnAlterarClick(self);
+end;
+
+procedure TfrmCondicoesPgto.edtConsultaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if key = #13 then
+    begin
+      if edtConsulta.Text <> trim('') then
+        begin
+          with qryDados, SQL do
+            begin
+              Close;
+              Clear;
+
+              // CODIGO
+              if RdBtnCodigo.Checked then
+                begin
+                  Add('SELECT * FROM condicoespgto WHERE codigo = :cod');
+                  ParamByName('cod').AsInteger := StrToInt(edtConsulta.Text);
+                end;
+
+              // DESCRICAO
+              if RdBtnDescricao.Checked then
+                begin
+                  Add('SELECT * FROM condicoespgto WHERE descricao LIKE :nome');
+                  ParamByName('nome').AsString := '%' + edtConsulta.Text + '%';
+                end;
+
+                Add('ORDER BY '+ frmPrincipal.sCampo);              
+
+              Open;
+            end;
+        end;
+      cdsDados.Open;
+      cdsDados.Refresh;
+
+      GrdCondicoesPgto.SetFocus; 
+    end;
+end;
+
+procedure TfrmCondicoesPgto.BtnAlterarClick(Sender: TObject);
+begin
+  frmIncluirCondicaoPgto := TfrmIncluirCondicaoPgto.Create(self);
+
+  inherited;
+
+  frmIncluirCondicaoPgto.ShowModal;
+  FreeAndNil(frmIncluirCondicaoPgto);
+
+  mostraTodos;
+
+end;
+
+procedure TfrmCondicoesPgto.BtnExcluirClick(Sender: TObject);
+begin
+  inherited;
+  if MessageDlg('Deseja realmente excluir a condição de pagamento '+cdsDados.FieldByName('descricao').AsString+'?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+    begin
+      if cdsDados.FieldByName('codigo').AsString <> trim('') then
+        begin
+          try
+            with qryDados, SQL do
+              begin
+                Close;
+                Clear;
+                Add('DELETE FROM condicoespgto WHERE codigo = :cod');
+                ParamByName('cod').AsInteger := cdsDados.FieldByName('codigo').AsInteger;
+                ExecSQL();
+              end;
+          except
+            MessageDlg('Erro ao excluir a condição de pagamento!',mtError,[mbOk],0);
+          end;
+        end;         
+      mostraTodos;
+    end;
+end;
+
+procedure TfrmCondicoesPgto.FormCreate(Sender: TObject);
+begin
+  inherited;
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmCondicoesPgto.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  loFuncoes.Free;
+end;
+
+procedure TfrmCondicoesPgto.GrdCondicoesPgtoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if key = #13 then
+    if telaChamando > 0 then
+      GrdCondicoesPgtoDblClick(self)
+    else
+      BtnAlterarClick(self);
+end;
+
+procedure TfrmCondicoesPgto.GrdCondicoesPgtoTitleClick(Column: TColumn);
+begin
+  inherited;
+  frmPrincipal.sCampo := Column.FieldName; // CAMPO RECEBE O NOME DA COLUNA CLICADA,
+
+  sSQL := 'SELECT * FROM condicoespgto ORDER BY '+frmPrincipal.sCampo;
+
+  mostraTodos;
+end;
+
+end.

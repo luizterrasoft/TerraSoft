@@ -1,0 +1,309 @@
+unit unEquipamentos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, unConsultas, FMTBcd, Provider, DBClient, DB, SqlExpr, StdCtrls,
+  Buttons, ExtCtrls, Grids, DBGrids, unFUncoes;
+
+type
+  TfrmEquipamentos = class(TfrmConsultas)
+    Bevel1: TBevel;
+    RdBtnCodigo: TRadioButton;
+    RdBtnDescricao: TRadioButton;
+    GrdEquipamentos: TDBGrid;
+    BtnLancarManutencao: TBitBtn;
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure GrdEquipamentosDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure GrdEquipamentosDblClick(Sender: TObject);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure edtConsultaKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BtnLancarManutencaoClick(Sender: TObject);
+    procedure GrdEquipamentosKeyPress(Sender: TObject; var Key: Char);
+    procedure GrdEquipamentosTitleClick(Column: TColumn);
+  private
+    loFuncoes: TFuncoes;
+    procedure carregaDados; override;
+  public
+    telaChamando: integer;
+  end;
+
+var
+  frmEquipamentos: TfrmEquipamentos;
+
+implementation
+
+uses unIncluirEquipamento, unPrincipal, unIncluirOS, unManutencoes,
+  unAgendaManu, unIncluirAgendamento, unConsultaManutencoes, unLavacoes,
+  unIncluirLavacao, unIncluirContasPagar, unRelatoriosManutencoes,
+  unSelRelServicosEquipamentos, unIncluirAbastecimento;
+
+{$R *.dfm}
+
+{ TfrmEquipamentos }
+
+procedure TfrmEquipamentos.carregaDados;
+begin
+  inherited;
+  with cdsDados do
+    begin
+      with frmIncluirEquipamento do
+        begin
+          edtCodigo.Text          := FieldBYName('codigo').AsString;
+          edtDescricao.Text       := FieldByName('descricao').AsString;
+          edtMarca.Text           := FieldByName('marca').AsString;
+          edtModelo.Text          := FieldByName('modelo').AsString;
+          mskDataCompra.Text      := FieldByName('datacompra').AsString;
+          edtCor.Text             := FieldByName('cor').AsString;
+          edtQtdHoras.Text        := FieldByName('qtdhoras').AsString;
+          edtCodFuncionario.Text  := FieldByName('codfuncionario').AsString;
+          CbxStatus.ItemIndex     := FieldByName('status').AsInteger;
+          edtPlaca.Text           := FieldBYName('placa').AsString;
+          CbxCalculo.ItemIndex    := FieldByname('tipocalculo').AsInteger;
+          CbxPropriedade.ItemIndex:= FieldByName('propriedade').AsInteger;
+          edtAnoFabricacao.Text   := FieldByName('anofabricacao').AsString;
+          edtValorAquisicao.Text  := FieldByName('valoraquisicao').AsString;
+          edtValorServico.Text    := FieldByName('valorhorakm').AsString;
+          edtConsHora.Text        := FieldByName('consumohorakm').AsString;
+          edtCodProprietario.Text := FieldByName('codproprietario').AsString;
+
+          lblProprietario.Caption:= loFuncoes.BuscaFk(FieldByName('codproprietario').AsString,'fornecedores','razaosocial');
+          lblFuncionario.Caption := loFuncoes.BuscaFk(FieldByName('codfuncionario').AsString,'funcionarios','nome');
+        end;
+    end;
+end;
+
+procedure TfrmEquipamentos.BtnIncluirClick(Sender: TObject);
+begin
+  inherited;
+  frmIncluirEquipamento := TfrmIncluirEquipamento.Create(self);
+  frmIncluirEquipamento.ShowModal;
+  FreeAndNil(frmIncluirEquipamento);
+  mostraTodos;
+end;
+
+procedure TfrmEquipamentos.GrdEquipamentosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if State = [] then
+  begin
+    if cdsDados.RecNo mod 2 = 1 then
+      GrdEquipamentos.Canvas.Brush.Color := clMoneyGreen
+    else
+      GrdEquipamentos.Canvas.Brush.Color := clWhite;
+  end;
+  GrdEquipamentos.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+end;
+
+procedure TfrmEquipamentos.GrdEquipamentosDblClick(Sender: TObject);
+begin
+  inherited;
+  if telachamando <> 0 then
+    begin
+      if telaChamando = 1 then // os
+        begin
+          frmIncluirOS.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmIncluirOS.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 2 then // agenda manu
+        begin
+          frmAgendaManu.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmAgendaManu.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 3 then // inclusao agenda
+        begin
+          frmIncluirAgendamento.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmIncluirAgendamento.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 4 then // selecionar equipamento para lançar manutencao
+        begin
+          frmManutencoes.codEquipamento := cdsDados.FieldByName('codigo').AsInteger;
+        end;
+
+      if telaChamando = 5 then // consulta de manutenções
+        begin
+          frmConsultaManutencoes.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmConsultaManutencoes.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 6 then // lavacoes - consulta
+        begin
+          frmLavacoes.edtCodigo.Text        := cdsDados.FieldByName('codigo').AsString;
+          frmLavacoes.lblResultado.Caption  := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 7 then // lavacao - inclusao
+        begin
+          frmIncluirLavacao.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmIncluirLavacao.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telachamando = 8 then // inclusao contas a pagar manual
+        begin
+          frmIncluirContasPagar.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmIncluirContasPagar.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 9 then // relatorio de manutencoes por equipamento
+        begin
+          frmRelatoriosManutencoes.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmRelatoriosManutencoes.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 10 then // relatorio de servicos por equipamento
+        begin
+          frmSelRelServicosEquipamentos.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmSelRelServicosEquipamentos.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      if telaChamando = 11 then // incluir abastecimento
+        begin
+          frmIncluirAbastecimento.edtCodEquipamento.Text := cdsDados.FieldByName('codigo').AsString;
+          frmIncluirAbastecimento.lblEquipamento.Caption := cdsDados.FieldByName('descricao').AsString;
+        end;
+
+      Self.Close;
+    end
+  else
+    BtnAlterarClick(self);
+end;
+
+procedure TfrmEquipamentos.BtnAlterarClick(Sender: TObject);
+begin
+
+  frmIncluirEquipamento := TfrmIncluirEquipamento.Create(self);
+
+  inherited;
+
+  frmIncluirEquipamento.ShowModal;
+  FreeAndNil(frmIncluirEquipamento);
+
+  mostraTodos;
+end;
+
+procedure TfrmEquipamentos.edtConsultaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if key = #13 then
+    begin
+      if edtConsulta.Text <> trim('') then
+        begin
+          with qryDados, SQL do
+            begin
+              Close;
+              Clear;
+
+              // CODIGO
+              if RdBtnCodigo.Checked then
+                begin
+                  Add('SELECT * FROM equipamentos WHERE codigo = :cod');
+                  ParamByName('cod').AsInteger := StrToInt(edtConsulta.Text);
+                end;
+
+              // DESCRICAO
+              if RdBtnDescricao.Checked then
+                begin
+                  Add('SELECT * FROM equipamentos WHERE descricao LIKE :desc');
+                  ParamByName('desc').AsString := '%' + edtConsulta.Text + '%';
+                end;
+              Open;
+            end;
+        end;
+      cdsDados.Open;
+      cdsDados.Refresh;
+
+      GrdEquipamentos.SetFocus;
+    end;
+end;
+
+procedure TfrmEquipamentos.FormCreate(Sender: TObject);
+begin
+  inherited;
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmEquipamentos.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  loFuncoes.Free;
+end;
+
+procedure TfrmEquipamentos.BtnExcluirClick(Sender: TObject);
+begin
+  inherited;
+  if MessageDlg('Deseja realmente excluir o equipamento '+cdsDados.FieldByName('descricao').AsString+'?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+    begin
+      if cdsDados.FieldByName('codigo').AsString <> trim('') then
+        begin
+          try
+            with qryDados, SQL do
+              begin
+                Close;
+                Clear;
+                Add('DELETE FROM equipamentos WHERE codigo = :cod');
+                ParamByName('cod').AsInteger := cdsDados.FieldByName('codigo').AsInteger;
+                ExecSQL();
+              end;
+          except
+            MessageDlg('Erro ao excluir o equipamento!',mtError,[mbOk],0);
+          end;
+        end;
+
+      mostraTodos;
+    end;
+end;
+
+procedure TfrmEquipamentos.FormShow(Sender: TObject);
+begin
+  frmPrincipal.sCampo := 'CODIGO';
+
+  sSQL := 'SELECT * FROM equipamentos';
+
+  inherited;
+
+end;
+
+procedure TfrmEquipamentos.BtnLancarManutencaoClick(Sender: TObject);
+begin
+  inherited;
+  frmManutencoes := TfrmManutencoes.Create(self);
+  frmManutencoes.codEquipamento := cdsDados.FieldByName('codigo').AsInteger;
+  frmManutencoes.ShowModal;
+  FreeAndNil(frmManutencoes);
+end;
+
+procedure TfrmEquipamentos.GrdEquipamentosKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if key = #13 then
+    if telaChamando > 0 then
+      GrdEquipamentosDblClick(self)
+    else
+      BtnAlterarClick(self);
+end;
+
+procedure TfrmEquipamentos.GrdEquipamentosTitleClick(Column: TColumn);
+begin
+  inherited;
+  frmPrincipal.sCampo := Column.FieldName; // CAMPO RECEBE O NOME DA COLUNA CLICADA,
+
+  sSQL := 'SELECT * FROM equipamentos ORDER BY '+ frmPrincipal.sCampo;
+
+  mostraTodos;
+end;
+
+end.

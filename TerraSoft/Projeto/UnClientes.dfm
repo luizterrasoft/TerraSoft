@@ -1,0 +1,180 @@
+inherited frmClientes: TfrmClientes
+  Left = 529
+  Top = 106
+  Caption = 'CLIENTES'
+  ClientHeight = 524
+  ClientWidth = 795
+  OldCreateOrder = True
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PnTitulo: TPanel
+    Width = 795
+    inherited lblTitulo: TLabel
+      Left = 207
+      Top = 8
+      Width = 261
+      Caption = 'CONSULTA DE CLIENTES'
+    end
+  end
+  inherited PnConsulta: TPanel
+    Width = 795
+    inherited Label1: TLabel
+      Left = 17
+    end
+    inherited Label2: TLabel
+      Left = 595
+      Top = 32
+    end
+    object Bevel1: TBevel [2]
+      Left = 214
+      Top = 7
+      Width = 2
+      Height = 50
+    end
+    inherited edtConsulta: TEdit
+      Left = 231
+      Top = 29
+      OnKeyPress = edtConsultaKeyPress
+    end
+    object RdBtnCodigo: TRadioButton
+      Left = 18
+      Top = 25
+      Width = 65
+      Height = 17
+      Caption = 'C'#243'digo'
+      TabOrder = 1
+    end
+    object RdBtnNome: TRadioButton
+      Left = 90
+      Top = 25
+      Width = 121
+      Height = 17
+      Caption = 'Nome/Raz'#227'o Social'
+      Checked = True
+      TabOrder = 2
+      TabStop = True
+    end
+    object RdBtnApelido: TRadioButton
+      Left = 18
+      Top = 41
+      Width = 113
+      Height = 17
+      Caption = 'Apelido/Fantasia'
+      TabOrder = 3
+    end
+  end
+  inherited PnDados: TPanel
+    Width = 795
+    Height = 375
+    object GrdClientes: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 793
+      Height = 373
+      Align = alClient
+      Color = 13565951
+      DataSource = dsDados
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -10
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnDrawColumnCell = GrdClientesDrawColumnCell
+      OnDblClick = GrdClientesDblClick
+      OnKeyPress = GrdClientesKeyPress
+      OnTitleClick = GrdClientesTitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CODIGO'
+          Title.Alignment = taCenter
+          Title.Caption = 'C'#243'digo'
+          Width = 47
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NOME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Nome'
+          Width = 175
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'APELIDO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Apelido'
+          Width = 142
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FONE1'
+          Title.Alignment = taCenter
+          Title.Caption = 'Fone 1'
+          Width = 86
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FONE2'
+          Title.Alignment = taCenter
+          Title.Caption = 'Fone 2'
+          Width = 83
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CELULAR'
+          Title.Alignment = taCenter
+          Title.Caption = 'Celular'
+          Width = 77
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CPF'
+          Title.Alignment = taCenter
+          Title.Caption = 'CPF/CNPJ'
+          Width = 134
+          Visible = True
+        end>
+    end
+  end
+  inherited PnAcoes: TPanel
+    Top = 481
+    Width = 795
+    inherited BtnSair: TBitBtn
+      Left = 648
+    end
+    inherited BtnRelatorios: TBitBtn
+      Left = 504
+    end
+    object BtnCreditos: TBitBtn
+      Left = 424
+      Top = 7
+      Width = 75
+      Height = 25
+      Caption = 'Cr'#233'ditos'
+      TabOrder = 5
+      OnClick = BtnCreditosClick
+    end
+  end
+  inherited qryDados: TSQLQuery
+    Top = 9
+  end
+  inherited dsDados: TDataSource
+    Top = 9
+  end
+  inherited cdsDados: TClientDataSet
+    Top = 9
+  end
+  inherited dspDados: TDataSetProvider
+    Top = 9
+  end
+end

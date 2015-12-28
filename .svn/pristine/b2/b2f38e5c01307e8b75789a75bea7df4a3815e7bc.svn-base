@@ -1,0 +1,286 @@
+unit unAgendaManu;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, FMTBcd, SqlExpr,
+  Provider, DB, DBClient, unFuncoes;
+
+type
+  TfrmAgendaManu = class(TForm)
+    PnTopo: TPanel;
+    PnAgendamentos: TPanel;
+    PnAcoes: TPanel;
+    BtnIncluir: TBitBtn;
+    BtnAlterar: TBitBtn;
+    BtnExcluir: TBitBtn;
+    BtnConcluir: TBitBtn;
+    BtnSair: TBitBtn;
+    GrdAgendaments: TDBGrid;
+    dsAgendamentos: TDataSource;
+    cdsAgendamentos: TClientDataSet;
+    dspAgendamentos: TDataSetProvider;
+    qryAgendamentos: TSQLQuery;
+    edtCodEquipamento: TEdit;
+    BtnBuscaEquipamento: TBitBtn;
+    lblEquipamento: TLabel;
+    Label1: TLabel;
+    BtnCOnsultar: TBitBtn;
+    Label2: TLabel;
+    CbxStatus: TComboBox;
+    dsAux: TDataSource;
+    cdsAux: TClientDataSet;
+    dspAux: TDataSetProvider;
+    qryAux: TSQLQuery;
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure edtCodEquipamentoExit(Sender: TObject);
+    procedure edtCodEquipamentoEnter(Sender: TObject);
+    procedure BtnBuscaEquipamentoClick(Sender: TObject);
+    procedure BtnCOnsultarClick(Sender: TObject);
+    procedure BtnConcluirClick(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure GrdAgendamentsTitleClick(Column: TColumn);
+  private
+
+    loFuncoes: TFuncoes;
+    procedure mostraTodas;
+    procedure carregaDados;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAgendaManu: TfrmAgendaManu;
+
+implementation
+
+uses unDM, unEquipamentos, unIncluirAgendamento, DateUtils, unPrincipal;
+
+{$R *.dfm}
+
+procedure TfrmAgendaManu.BtnSairClick(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmAgendaManu.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Self.Close;
+end;
+
+procedure TfrmAgendaManu.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmAgendaManu.mostraTodas;
+begin
+  with qryAgendamentos, SQL do
+    begin
+      Close;
+      Clear;
+      Add('SELECT ag.codigo, ag.qtdhoras, ag.descricao, ag.status, ag.aviso, ag.codequipamento');
+      Add(',equip.descricao as equipamento');
+      Add('FROM agendamanu ag');
+      Add('INNER JOIN equipamentos equip');
+      Add('ON equip.codigo = ag.codequipamento');
+      Add('WHERE ag.status = 0 OR ag.status IS NULL');
+      Open;
+      cdsAgendamentos.Close;
+      cdsAgendamentos.Open;
+    end;
+end;
+
+procedure TfrmAgendaManu.FormShow(Sender: TObject);
+begin
+  frmPrincipal.sCampo := 'DESCRICAO';
+
+  mostraTodas;
+end;
+
+procedure TfrmAgendaManu.FormCreate(Sender: TObject);
+begin
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmAgendaManu.FormDestroy(Sender: TObject);
+begin
+  loFuncoes.Free;
+end;
+
+procedure TfrmAgendaManu.edtCodEquipamentoExit(Sender: TObject);
+begin
+  if edtCodEquipamento.Text <> trim('') then
+    begin
+      lblEquipamento.Caption := loFuncoes.BuscaFk(edtCodEquipamento.Text,'equipamentos','descricao');
+
+      if lblEquipamento.Caption = trim('') then
+        begin
+          edtCodEquipamento.Clear;
+          BtnBuscaEquipamento.SetFocus;
+        end
+      else
+        CbxStatus.SetFocus;
+    end;
+end;
+
+procedure TfrmAgendaManu.edtCodEquipamentoEnter(Sender: TObject);
+begin
+  lblEquipamento.Caption := '';
+end;
+
+procedure TfrmAgendaManu.BtnBuscaEquipamentoClick(Sender: TObject);
+begin
+  frmEquipamentos := TfrmEquipamentos.Create(self);
+  frmEquipamentos.telaChamando := 2;
+  frmEquipamentos.ShowModal;
+  FreeAndNil(frmEquipamentos);
+
+  if lblEquipamento.Caption <> trim('') then
+    CbxStatus.SetFocus;
+end;
+
+procedure TfrmAgendaManu.BtnCOnsultarClick(Sender: TObject);
+begin
+  with qryAgendamentos, SQL do
+    begin
+      Close;
+      Clear;
+      Add('SELECT ag.qtdhoras, ag.descricao, eq.descricao as equipamento, ag.aviso, ag.codequipamento');
+      Add('FROM agendamanu ag');
+      Add('INNER JOIN equipamentos eq');
+      Add('ON eq.codigo = ag.codequipamento');
+
+      if (edtCodEquipamento.Text <> trim('')) and (edtCodEquipamento.Text <> trim('0')) then
+        Add('WHERE ag.codequipamento = :equip');
+
+      case CbxStatus.ItemIndex of
+        0:
+          begin
+            Add('AND ag.status = 1'); // aberto
+          end;
+
+        1:
+          begin
+            Add('AND ag.status = 2'); // concluido
+          end;
+      end;
+
+      Add('ORDER BY '+ frmPrincipal.sCampo);
+
+      if (edtCodEquipamento.Text <> trim('')) and (edtCodEquipamento.Text <> trim('0')) then
+        ParamByName('equip').AsInteger := StrToInt(edtCodEquipamento.Text);
+
+      Open;
+      cdsAgendamentos.Close;
+      cdsAgendamentos.Open;
+    end;  
+end;
+
+procedure TfrmAgendaManu.BtnConcluirClick(Sender: TObject);
+begin
+  if cdsAgendamentos.RecordCount > 0 then
+    begin
+      with qryAgendamentos, SQL do
+        begin
+          Close;
+          Clear;
+          Add('UPDATE agendamanu SET status = 2');
+          Add('WHERE codigo = :cod');
+          ParamByName('cod').AsInteger := cdsAgendamentos.FieldByName('codigo').AsInteger;
+          ExecSQL();
+        end;
+    end;
+
+  mostraTodas;
+end;
+
+procedure TfrmAgendaManu.BtnIncluirClick(Sender: TObject);
+begin
+  frmIncluirAgendamento := TfrmIncluirAgendamento.Create(self);
+  frmIncluirAgendamento.opcSal := 1;
+  frmIncluirAgendamento.ShowModal;
+  FreeAndNil(frmIncluirAgendamento);
+
+  mostraTodas;
+end;
+
+procedure TfrmAgendaManu.BtnAlterarClick(Sender: TObject);
+begin
+  frmIncluirAgendamento := TfrmIncluirAgendamento.Create(self);
+  frmIncluirAgendamento.opcSal := 2;
+  carregaDados;
+  frmIncluirAgendamento.ShowModal;
+  FreeAndNil(frmIncluirAgendamento);
+
+  mostraTodas;
+end;
+
+procedure TfrmAgendaManu.carregaDados;
+begin
+  with cdsAgendamentos do
+    begin
+      with frmIncluirAgendamento do
+        begin
+          edtCodigo.Text          := FieldByName('codigo').AsString;
+          edtDescricao.Text       := FieldByName('descricao').AsString;
+          edtQtdHoras.Text        := FieldByName('qtdhoras').AsString;
+          frmIncluirAgendamento.edtCodEquipamento.Text  := FieldByName('codequipamento').AsString;
+
+          if (edtCodEquipamento.Text <> trim('')) and (edtCodEquipamento.Text <> trim('0')) then
+            frmIncluirAgendamento.lblEquipamento.Caption := loFuncoes.BuscaFk(FieldByName('codequipamento').AsString,'equipamentos','descricao');
+
+          case FieldByName('status').AsInteger of
+            0:  frmIncluirAgendamento.CbxStatus.ItemIndex := 0;
+            1:  frmIncluirAgendamento.CbxStatus.ItemIndex := 1;
+          end;
+
+          edtAvisar.Text := FieldByName('aviso').AsString;
+        end;
+    end;
+end;
+
+procedure TfrmAgendaManu.BtnExcluirClick(Sender: TObject);
+begin
+  if cdsAgendamentos.FieldByName('codigo').AsInteger > 0 then
+    begin
+      if (MessageDlg('Deseja realmente excluir o agendamento?',mtConfirmation,[mbYes,mbNo],0)=mrYes) then
+        begin
+          with qryAgendamentos, SQL do
+            begin
+              Close;
+              Clear;
+              Add('DELETE FROM agendamanu');
+              Add('WHERE codigo = :cod');
+              ParamByName('cod').AsInteger := cdsAgendamentos.FieldByName('codigo').AsInteger;
+              ExecSQL();
+            end;
+
+          mostraTodas;
+        end;          
+    end;
+end;
+
+procedure TfrmAgendaManu.GrdAgendamentsTitleClick(Column: TColumn);
+begin
+  frmPrincipal.sCampo := Column.FieldName; // CAMPO RECEBE O NOME DA COLUNA CLICADA,
+
+  BtnConsultarClick(self);
+end;
+
+end.

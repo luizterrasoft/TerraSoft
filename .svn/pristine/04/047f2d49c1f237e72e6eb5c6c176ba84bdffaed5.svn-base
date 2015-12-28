@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = ProvaDelphi.exe calculadora01.dll spComponentes01.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+ProvaDelphi.exe: ProvaDelphi.dpr
+  $(DCC)
+
+calculadora01.dll: calculadora01.dpr
+  $(DCC)
+
+spComponentes01.bpl: spComponentes01.dpk
+  $(DCC)
+
+

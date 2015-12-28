@@ -1,0 +1,500 @@
+unit unQuitarContaReceber;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, Mask, Buttons, FMTBcd, SqlExpr,
+  Provider, DB, DBClient, unFuncoes;
+
+type
+  TfrmQuitarContaReceber = class(TForm)
+    PnTopo: TPanel;
+    PnDados: TPanel;
+    PnRodape: TPanel;
+    Label1: TLabel;
+    BtnConfirmar: TBitBtn;
+    BtnCancelar: TBitBtn;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    mskData: TMaskEdit;
+    edtCodFormaRcbto: TEdit;
+    BtnBuscaFormaPgto: TBitBtn;
+    lblFormaRcbto: TLabel;
+    RchEdtObs: TRichEdit;
+    dsQuitar: TDataSource;
+    cdsQuitar: TClientDataSet;
+    dspQuitar: TDataSetProvider;
+    qryQuitar: TSQLQuery;
+    dsAux: TDataSource;
+    cdsAux: TClientDataSet;
+    dspAux: TDataSetProvider;
+    qryAux: TSQLQuery;
+    Label7: TLabel;
+    edtCodConta: TEdit;
+    BtnBuscaConta: TBitBtn;
+    lblConta: TLabel;
+    lblRestante: TLabel;
+    dsParcial: TDataSource;
+    cdsParcial: TClientDataSet;
+    dspParcial: TDataSetProvider;
+    qryParcial: TSQLQuery;
+    dsAux2: TDataSource;
+    cdsAux2: TClientDataSet;
+    dspAux2: TDataSetProvider;
+    qryAux2: TSQLQuery;
+    lblDesconto: TLabel;
+    edtDesconto: TEdit;
+    lblAcrescimo: TLabel;
+    edtAcrescimo: TEdit;
+    lblSubTotal: TLabel;
+    lblTotal: TLabel;
+    lblVlrTotal: TLabel;
+    Label3: TLabel;
+    Label6: TLabel;
+    edtValor: TEdit;
+    mskNovoVencimento: TMaskEdit;
+    procedure BtnCancelarClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BtnConfirmarClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodFormaRcbtoExit(Sender: TObject);
+    procedure edtCodFormaRcbtoEnter(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure edtCodContaEnter(Sender: TObject);
+    procedure edtCodContaExit(Sender: TObject);
+    procedure BtnBuscaFormaPgtoClick(Sender: TObject);
+    procedure BtnBuscaPlanoClick(Sender: TObject);
+    procedure BtnBuscaContaClick(Sender: TObject);
+    procedure edtValorExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtDescontoExit(Sender: TObject);
+    procedure edtAcrescimoExit(Sender: TObject);
+    procedure edtValorEnter(Sender: TObject);
+  private
+    loFuncoes: TFuncoes;
+    function Total: Double;
+
+  public
+    iTipoQuitacao: integer;
+    codOs: integer;
+    codConta: integer;
+    vlrRestante: Real;
+    JaQuitado: Real;
+  end;
+
+var
+  frmQuitarContaReceber: TfrmQuitarContaReceber;
+
+implementation
+
+uses unDM, unFormasPgto, unPlanoContas, unContas, unPrincipal;
+
+{$R *.dfm}
+
+procedure TfrmQuitarContaReceber.BtnCancelarClick(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmQuitarContaReceber.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Self.Close;
+end;
+
+
+procedure TfrmQuitarContaReceber.BtnConfirmarClick(Sender: TObject);
+var
+  iCodCliente: integer;
+begin
+  try
+  if (StrToFloat(edtValor.Text) < StrToFloat(lblRestante.Caption)) and (iTipoQuitacao = 2) then
+  begin
+    MessageDlg('Não é possível realizar baixa parcial de várias contas ao mesmo tempo. Revise o valor à ser recebido!',mtWarning,[mbOk],0);
+    edtValor.SetFocus;
+    Exit;
+  end;
+
+    if (iTipoQuitacao = 1) then
+    begin
+      { VERIFICA SE FOR PARCIAL, E NÃO TIVER O NOVO VENCIMENTO, BLOQUEIA E INFORMA O USUÁRIO }
+      if (StrToFloat(edtValor.Text) < vlrRestante) and (mskNovoVencimento.Text = '  /  /    ') then
+        begin
+          MessageDlg('O sistema reconheceu uma baixa parcial, para isso informe um novo vencimento para o restante!',mtWarning,[mbOk],0);
+          mskNovoVencimento.SetFocus;
+          Exit;
+        end;
+
+      if (edtValor.Text = trim('0,00')) or (edtValor.Text = trim('0')) then
+        begin
+          MessageDlg('Digite um valor numérico maior que 0!',mtWarning,[mbOk],0);
+          Exit;
+        end;
+
+        with qryQuitar, SQL do
+          begin
+            Close;
+            Clear;
+            Add('UPDATE contasreceber SET valorrecebido=:vlrrec,status=:sta');
+            Add(',datarecebimento=:dtrec,desconto=:desc,acrescimo=:acres,');
+            Add('DATAOPERACAOQUITACAO=:dtopquit');
+            Add('WHERE codigo = :cod');
+
+            ParamByName('cod').AsInteger := codConta;
+            ParamByName('vlrrec').AsFloat:= StrToFloat(edtValor.Text);
+            ParamByName('dtrec').AsDate := StrToDate(mskData.Text);
+            ParamByName('sta').AsString := 'Q';
+            ParamByName('desc').AsFloat := StrToFloat(edtDesconto.Text);
+            ParamByName('acres').AsFloat:= StrToFloat(edtAcrescimo.Text);
+            ParamByName('dtopquit').AsDate := Date;
+            ExecSQL();
+
+            { VERIFICA SE ESTÁ RECEBENDO TUDO OU PARCIAL }
+            if vlrRestante > StrToFloat(edtValor.Text) then
+              begin
+                { SE FOR PARCIAL, INCLUE UMA NOVA CONTA A RECEBER }
+                qryAux.Close;
+                qryAux.SQL.Clear;
+                qryAux.SQL.Add('SELECT * FROM contasreceber');
+                qryAux.SQL.Add('WHERE codigo = :conta');
+                qryAux.ParamByName('conta').AsInteger := codConta;
+                qryAux.Open;
+                cdsAux.Close;
+                cdsAux.Open;
+
+                iCodCliente := cdsAux.FieldByname('codcliente').AsInteger;
+
+                qryParcial.Close;
+                qryParcial.SQL.Clear;
+                qryParcial.SQL.Add('INSERT INTO contasreceber (emissao,vencimento,valor,status,codcliente,');
+                qryParcial.SQL.Add('codos,descricao,numeroparcela,codusuario)');
+                qryParcial.SQL.Add('VALUES (:emi,:ven,:vlr,:sta,:cli,:os,:des,:npa,:usu)');
+                qryParcial.ParamByName('emi').AsDate := cdsAux.FieldByName('emissao').AsDateTime;
+                qryParcial.ParamByName('ven').AsDate := StrToDate(mskNovoVencimento.Text);
+                qryParcial.ParamByName('vlr').AsFloat:= vlrRestante - StrToFloat(edtValor.Text);
+                qryParcial.ParamByName('sta').AsString := 'A';
+                qryParcial.ParamByName('cli').AsInteger:= cdsAux.FieldByName('codcliente').AsInteger;
+                qryParcial.ParamByName('os').AsInteger := codOs;
+                qryParcial.ParamByName('des').AsString := 'RESTANTE PARCELA Nº: ' + cdsAux.FieldByName('numeroparcela').AsString + ' O.S.: ' + IntToStr(codOs);
+                qryParcial.ParamByName('npa').AsInteger:= cdsAux.FieldByname('numeroparcela').AsInteger;
+                qryParcial.ParamByName('usu').AsInteger:= 1;
+                qryParcial.Prepared := True;
+                qryParcial.ExecSQL();
+              end;
+          end;
+
+        qryAux.Close;
+        qryAux.SQL.Clear;
+        qryAux.SQL.Add('SELECT nome FROM clientes');
+        qryAux.SQL.Add('WHERE codigo = :cod');
+        qryAux.ParamByName('cod').AsInteger := iCodCliente;
+        qryAux.Open;
+        cdsAux.Close;
+        cdsAux.Open;
+
+        with qryQuitar, SQL do
+          begin
+            Close;
+            Clear;
+            Add('INSERT INTO caixa (codconta,valor,descricao,data,tipo)');
+            Add('VALUES (:conta,:valor,:desc,:data,:tip)');
+            ParamByName('conta').AsInteger := StrToInt(edtCodConta.Text);
+            ParamByName('valor').AsFloat   := StrToFloat(edtValor.Text);
+            ParamByName('desc').AsString   := 'RECBTO. O.S.: ' + IntToStr(codOs) + ' ' + cdsAux.FieldByName('nome').AsString;
+            ParamByName('data').AsDate     := StrToDate(mskData.Text);
+            ParamByName('tip').AsString    := 'C';
+            ExecSQL();
+          end;
+
+        with qryAux, SQL do
+          begin
+            Close;
+            Clear;
+            Add('SELECT MAX(codigo) AS codigo FROM caixa');
+            Open;
+            cdsAux.Close;
+            cdsAux.Open;
+          end;
+
+        with qryQuitar, SQL do
+          begin
+            Close;
+            Clear;
+            Add('INSERT INTO HISTORICOCONTARECEBER (datarecbto,valor,codformapgto,valoratual,codcontareceber,codconta,obs,codlancamentocaixa)');
+            Add('VALUES (:dtRec,:vlr,:codforma,:vlrat,:codconta,:codcon,:obs,:codcaixa)');
+            ParamByName('dtrec').AsDate := StrToDate(mskData.Text);
+            ParamByName('vlr').AsFloat  := StrToFloat(edtValor.Text);
+            ParamByName('codforma').AsInteger := StrToInt(edtCodFormaRcbto.Text);
+            ParamByName('vlrat').AsFloat      := vlrRestante - StrToFloat(edtValor.Text);
+            ParamByName('codconta').AsInteger := codConta;
+            ParamByName('codcon').AsInteger := StrToInt(edtCodConta.Text);
+            ParamByName('obs').AsString := RchEdtObs.Text;
+            ParamByName('codcaixa').AsInteger := cdsAux.FieldByName('codigo').AsInteger;
+            ExecSQL();
+          end;
+    end;
+
+  if (iTipoQuitacao = 2) then
+  begin
+    qryAux.Close;
+    qryAux.SQL.Clear;
+    qryAux.SQL.Add('SELECT * FROM contasreceber');
+    qryAux.SQL.Add('WHERE marcada = 1');
+    qryAux.Open;
+    cdsAux.Close;
+    cdsAux.Open;
+
+    cdsAux.First;
+
+    while not(cdsAux.Eof) do
+      begin
+        qryQuitar.Close;
+        qryQuitar.SQL.Clear;
+        qryQuitar.SQL.Add('UPDATE contasreceber SET valorrecebido=:vlrrec,status=:sta');
+        qryQuitar.SQL.Add(',datarecebimento=:dtrec');
+        qryQuitar.SQL.Add('WHERE codigo = :cod');
+        qryQuitar.ParamByName('cod').AsInteger := cdsAux.FieldByName('codigo').AsInteger;
+        qryQuitar.ParamByName('vlrrec').AsFloat:= cdsAux.FieldByname('valor').AsFloat;
+        qryQuitar.ParamByName('dtrec').AsDate := StrToDate(mskData.Text);
+        qryQuitar.ParamByName('sta').AsString := 'Q';
+        qryQuitar.ExecSQL();
+
+        qryAux2.Close;
+        qryAux2.SQL.Clear;
+        qryAux2.SQL.Add('SELECT nome FROM clientes');
+        qryAux2.SQL.Add('WHERE codigo = :cod');
+        qryAux2.ParamByName('cod').AsInteger := cdsAux.FieldByName('codcliente').AsInteger;
+        qryAux2.Open;
+        cdsAux2.Close;
+        cdsAux2.Open;
+
+        with qryQuitar, SQL do
+          begin
+            Close;
+            Clear;
+            Add('INSERT INTO caixa (codconta,valor,descricao,data,tipo)');
+            Add('VALUES (:conta,:valor,:desc,:data,:tip)');
+            ParamByName('conta').AsInteger := StrToInt(edtCodConta.Text);
+            ParamByName('valor').AsFloat   := cdsAux.FieldByname('valor').AsFloat;
+            ParamByName('desc').AsString   := 'RECBTO. PARCELA O.S.: ' + cdsAux.FieldByname('codos').AsString + ' ' + cdsAux2.FieldByName('nome').AsString;
+            ParamByName('data').AsDate     := StrToDate(mskData.Text);
+            ParamByName('tip').AsString    := 'C';
+            ExecSQL();
+          end;
+
+        with qryParcial, SQL do
+          begin
+            Close;
+            Clear;
+            Add('SELECT MAX(codigo) AS codigo FROM caixa');
+            Open;
+            cdsParcial.Close;
+            cdsParcial.Open;
+          end;
+
+        with qryQuitar, SQL do
+          begin
+            Close;
+            Clear;
+            Add('INSERT INTO HISTORICOCONTARECEBER (datarecbto,valor,codformapgto,valoratual,codcontareceber,codconta,obs,codlancamentocaixa)');
+            Add('VALUES (:dtRec,:vlr,:codforma,:vlrat,:codconta,:codcon,:obs,:codcaixa)');
+            ParamByName('dtrec').AsDate := StrToDate(mskData.Text);
+            ParamByName('vlr').AsFloat  := cdsAux.FieldByName('valor').AsFloat;
+            ParamByName('codforma').AsInteger := StrToInt(edtCodFormaRcbto.Text);
+            ParamByName('vlrat').AsFloat      := 0;
+            ParamByName('codconta').AsInteger := cdsAux.FieldByname('codigo').AsInteger;
+            ParamByName('codcon').AsInteger := StrToInt(edtCodConta.Text);
+            ParamByName('obs').AsString := RchEdtObs.Text;
+            ParamByName('codcaixa').AsInteger := cdsParcial.FieldByName('codigo').AsInteger;
+            ExecSQL();
+          end;
+
+        cdsAux.Next;
+      end;
+  end;
+
+  except
+    MessageDlg('Erro ao quitar a parcela!',mtWarning,[mbOk],0);
+  end;
+
+  Self.Close;
+end;
+
+procedure TfrmQuitarContaReceber.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmQuitarContaReceber.edtCodFormaRcbtoExit(Sender: TObject);
+begin
+  if edtCodFormaRcbto.Text <> trim('') then
+    begin
+      lblFormaRcbto.Caption := loFuncoes.BuscaFk(edtCodFormaRcbto.Text,'formaspgto','descricao');
+
+      if lblFormaRcbto.Caption = trim('') then
+        begin
+          edtCodFormaRcbto.Clear;
+          BtnBuscaFormaPgto.SetFocus;
+        end
+      else
+        edtCodConta.SetFocus;
+    end;
+end;
+
+procedure TfrmQuitarContaReceber.edtCodFormaRcbtoEnter(Sender: TObject);
+begin
+  lblFormaRcbto.Caption := '';
+end;
+
+procedure TfrmQuitarContaReceber.FormCreate(Sender: TObject);
+begin
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmQuitarContaReceber.FormDestroy(Sender: TObject);
+begin
+  loFuncoes.Free;
+end;
+
+procedure TfrmQuitarContaReceber.edtCodContaEnter(Sender: TObject);
+begin
+  lblConta.Caption := '';
+end;
+
+procedure TfrmQuitarContaReceber.edtCodContaExit(Sender: TObject);
+begin
+  if edtCodConta.Text <> trim('') then
+    begin
+      lblConta.Caption := loFuncoes.BuscaFk(edtCodConta.Text,'contas','descricao');
+
+      if lblConta.Caption = trim('') then
+        begin
+          edtCodConta.Clear;
+          BtnBuscaConta.SetFocus;
+        end
+      else
+        BtnConfirmar.SetFocus;
+    end;
+end;
+
+procedure TfrmQuitarContaReceber.BtnBuscaFormaPgtoClick(Sender: TObject);
+begin
+  frmFormasPgto := TfrmFormasPgto.Create(self);
+  frmFormasPgto.telaChamando := 3;
+  frmFormasPgto.ShowModal;
+  FreeAndNil(frmFormasPgto);
+
+  if lblFormaRcbto.Caption <> trim('') then
+    edtCodConta.SetFocus;
+end;
+
+procedure TfrmQuitarContaReceber.BtnBuscaPlanoClick(Sender: TObject);
+begin
+  frmPlanoContas := TfrmPlanoContas.Create(self);
+  frmPlanoContas.telaChamando := 3;
+  frmPlanoContas.ShowModal;
+  FreeAndNil(frmPlanoContas);
+
+  if lblConta.Caption <> trim('') then
+    edtCodConta.SetFocus;
+end;
+
+procedure TfrmQuitarContaReceber.BtnBuscaContaClick(Sender: TObject);
+begin
+  frmContas := TfrmContas.Create(self);
+  frmContas.telaChamando := 1;
+  frmContas.ShowModal;
+  FreeAndNil(frmContas);
+
+  if lblConta.Caption <> trim('') then
+    BtnConfirmar.SetFocus;
+end;
+
+procedure TfrmQuitarContaReceber.edtValorExit(Sender: TObject);
+begin
+  edtValor.Text := loFUncoes.TrataReal(edtValor.Text);
+
+  if (StrToFloat(edtValor.Text) < vlrRestante) and (iTipoQuitacao = 1) then
+  begin
+    Label6.Visible            := True;
+    mskNovoVencimento.Visible := True;
+    mskNovoVencimento.SetFocus;
+  end
+  else
+  begin
+    Label6.Visible            := False;
+    mskNovoVencimento.Visible := False;
+    edtCodFormaRcbto.SetFocus;
+  end;
+end;
+
+procedure TfrmQuitarContaReceber.FormShow(Sender: TObject);
+begin
+  if iTipoQuitacao = 2 then
+    lblRestante.Caption := FloatToStr(Total);
+
+  if iTipoQuitacao = 1 then
+    lblRestante.Caption := FloatToStr(vlrRestante);
+
+    
+  edtValor.Text       := loFUncoes.TrataReal(edtValor.Text);
+  lblRestante.Caption := loFUncoes.TrataReal(lblRestante.Caption);
+  mskData.Text        := DateToStr(Date);
+end;
+
+function TfrmQuitarContaReceber.Total: Double;
+var
+  DRetorno: Double;
+begin
+  try
+    DRetorno := 0;
+
+    qryQuitar.Close;
+    qryQuitar.SQL.Clear;
+    qryQuitar.SQL.Add('SELECT SUM(valor) AS Total FROM contasreceber WHERE marcada = 1');
+    qryQuitar.Open;
+    cdsQuitar.Close;
+    cdsQuitar.Open;
+  except
+    MessageDlg('Erro ao gerar total a ser recebido!',mtError,[mbOk],0);
+  end;
+
+  DRetorno := cdsQuitar.FieldByname('Total').AsFloat;
+
+  Result := DRetorno;
+end;
+
+procedure TfrmQuitarContaReceber.edtDescontoExit(Sender: TObject);
+begin
+  edtDesconto.Text := loFUncoes.TrataReal(edtDesconto.Text);
+
+  lblVlrTotal.Caption := FloatToStr(StrToFloat(lblRestante.Caption) - StrToFloat(edtDesconto.Text) + StrToFloat(edtAcrescimo.Text));
+  lblVlrTotal.Caption := loFuncoes.TrataReal(lblVlrTotal.Caption);
+  vlrRestante := StrToFloat(lblVlrTotal.Caption);
+end;
+
+procedure TfrmQuitarContaReceber.edtAcrescimoExit(Sender: TObject);
+begin
+  edtDesconto.Text := loFUncoes.TrataReal(edtDesconto.Text);
+
+  lblVlrTotal.Caption := FloatToStr(StrToFloat(lblRestante.Caption) - StrToFloat(edtDesconto.Text) + StrToFloat(edtAcrescimo.Text));
+  lblVlrTotal.Caption := loFuncoes.TrataReal(lblVlrTotal.Caption);
+  vlrRestante := StrToFloat(lblVlrTotal.Caption);  
+end;
+
+procedure TfrmQuitarContaReceber.edtValorEnter(Sender: TObject);
+begin
+  edtValor.Text := lblVlrTotal.Caption;
+end;
+
+end.

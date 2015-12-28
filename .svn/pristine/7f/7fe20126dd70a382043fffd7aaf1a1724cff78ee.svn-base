@@ -1,0 +1,8 @@
+- verificar descrição da cp quando for pagamento parcial.
+- verificar descrição para lançar no caixa.
+- verificar quantidade de horas na alteração do item na os.
+- cadastrar todos municipios do brasil
+- no tratamento da exceção, mostrar também msg original do erro.
+- colocar nas configuracoes se o cliente/usuario usa codigo do bloco.
+- desenvolver transferência no caixa.
+- lançar salário no contas pagar

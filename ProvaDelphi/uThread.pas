@@ -1,0 +1,95 @@
+unit uThread;
+
+interface
+
+uses
+  Classes, StdCtrls, ComCtrls, Windows;
+
+type
+  TClassThread = class(TThread)
+
+  private
+    FiTempo: integer;
+    FoProgressBar: TProgressBar;
+    FoLabel: TLabel;
+    procedure InicializarProgressBar;
+    procedure ProcessarProgressbar;
+    function GetTempo: integer;
+    function GetProgressBar: TProgressBar;
+    function GetLabel: TLabel;
+    procedure setTempo(piTempo: integer);
+    procedure setProgressBar(poProgressBar: TProgressBar);
+    procedure setLabel(poLabel: TLabel);
+  protected
+    procedure Execute; override;
+
+  public
+    property Tempo: integer read GetTempo write setTempo;
+    property ProgressBar: TProgressBar read GetProgressBar write setProgressBar;
+    property LabelResultado: TLabel read GetLabel write setLabel;
+
+  end;
+
+implementation
+
+uses
+  SysUtils;
+
+{ TClassThread }
+
+procedure TClassThread.Execute;
+var
+  i: integer;
+begin
+  Synchronize(InicializarProgressBar);
+  for i := 0 to 100 do
+  begin
+    Sleep(Tempo);
+    Synchronize(ProcessarProgressbar);
+  end;
+end;
+
+function TClassThread.GetLabel: TLabel;
+begin
+  Result := FoLabel;
+end;
+
+function TClassThread.GetProgressBar: TProgressBar;
+begin
+  Result := FoProgressBar;
+end;
+
+function TClassThread.GetTempo: integer;
+begin
+  Result := FiTempo;
+end;
+
+procedure TClassThread.InicializarProgressBar;
+begin
+  ProgressBar.Position := 0;
+  ProgressBar.Min := 0;
+  ProgressBar.Max := 100;
+end;
+
+procedure TClassThread.ProcessarProgressbar;
+begin
+  LabelResultado.Caption := IntToStr(ProgressBar.Position) + '%';
+  ProgressBar.Position := ProgressBar.Position + 1;
+end;
+
+procedure TClassThread.setLabel(poLabel: TLabel);
+begin
+  FoLabel := poLabel;
+end;
+
+procedure TClassThread.setProgressBar(poProgressBar: TProgressBar);
+begin
+  FoProgressBar := poProgressBar;
+end;
+
+procedure TClassThread.setTempo(piTempo: integer);
+begin
+  FiTempo := piTempo;
+end;
+
+end.

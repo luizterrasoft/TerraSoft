@@ -1,0 +1,194 @@
+unit unIncluirCaixa;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, StdCtrls, Buttons, ExtCtrls, unFuncoes, FMTBcd, SqlExpr,
+  Provider, DB, DBClient;
+
+type
+  TfrmIncluirCaixa = class(TForm)
+    PnDados: TPanel;
+    PnRodape: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    BtnBuscaConta: TBitBtn;
+    edtCodConta: TEdit;
+    lblConta: TLabel;
+    edtCodigo: TEdit;
+    edtValor: TEdit;
+    edtDescricao: TEdit;
+    mskData: TMaskEdit;
+    Label6: TLabel;
+    CbxTipo: TComboBox;
+    BtnGravar: TBitBtn;
+    BtnCancelar: TBitBtn;
+    dsCaixa: TDataSource;
+    cdsCaixa: TClientDataSet;
+    dspCaixa: TDataSetProvider;
+    qryCaixa: TSQLQuery;
+    procedure BtnCancelarClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure edtValorExit(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BtnGravarClick(Sender: TObject);
+    procedure BtnBuscaContaClick(Sender: TObject);
+    procedure edtCodContaEnter(Sender: TObject);
+    procedure edtCodContaExit(Sender: TObject);
+  private
+
+    loFuncoes: TFuncoes;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmIncluirCaixa: TfrmIncluirCaixa;
+
+implementation
+
+uses unDM, unContas, unPrincipal;
+
+{$R *.dfm}
+
+procedure TfrmIncluirCaixa.BtnCancelarClick(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmIncluirCaixa.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Self.Close;
+end;
+
+procedure TfrmIncluirCaixa.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    begin
+      Key:= #0;
+      Perform(Wm_NextDlgCtl,0,0);
+    end;
+end;
+
+procedure TfrmIncluirCaixa.edtValorExit(Sender: TObject);
+begin
+  if (edtValor.Text <> trim('')) and (edtValor.Text <> trim('0')) then
+    edtValor.Text := loFuncoes.TrataReal(edtValor.Text);
+end;
+
+procedure TfrmIncluirCaixa.FormCreate(Sender: TObject);
+begin
+  loFuncoes := TFuncoes.Create;
+end;
+
+procedure TfrmIncluirCaixa.FormDestroy(Sender: TObject);
+begin
+  loFuncoes.Free;
+end;
+
+procedure TfrmIncluirCaixa.BtnGravarClick(Sender: TObject);
+begin
+  if (edtDescricao.Text = trim('')) then
+    begin
+      MessageDlg('Por favor digite uma descrição para o lançamento!',mtWarning,[mbOk],0);
+      edtDescricao.SetFocus;
+      Exit;
+    end;
+
+  if ((edtValor.Text = trim('0')) or (edtValor.Text = trim('0,00')) or (edtValor.Text = trim(''))) then
+    begin
+      MessageDlg('Por favor digite um valor correto!',mtWarning,[mbOk],0);
+      edtValor.SetFocus;
+      Exit;
+    end;
+
+  if (mskData.Text = '  /  /    ') then
+    begin
+      MessageDlg('Por favor digite uma data válida!',mtWarning,[mbOk],0);
+      mskData.SetFocus;
+      Exit;
+    end;
+
+  if (CbxTipo.ItemIndex < 0) then
+    begin
+      MessageDlg('Por favor selecione o tipo do lançamento!',mtWarning,[mbOk],0);
+      CbxTipo.SetFocus;
+      Exit;
+    end;
+
+  if ((edtCodConta.Text = trim('0')) or (edtCodConta.Text = trim(''))) then
+    begin
+      MessageDlg('Por favor digite uma conta!',mtWarning,[mbOk],0);
+      edtCodConta.SetFocus;
+      Exit;
+    end;
+
+  try
+    with qryCaixa, SQL do
+      begin
+        Close;
+        Clear;
+        Add('INSERT INTO caixa (codconta,valor,descricao,data,tipo,codcaixa)');
+        Add('VALUES (:con,:vlr,:desc,:dt,:tip,:cx)');
+        ParamByName('con').AsInteger := StrToInt(edtCodConta.Text);
+        ParamByName('vlr').AsFloat   := StrToFloat(edtValor.Text);
+        ParamByName('desc').AsString := edtDescricao.Text;
+        ParamByName('dt').AsDate     := StrToDate(mskData.Text);
+        ParamByName('cx').AsInteger  := frmPrincipal.iCaixaUsado;
+
+        if CbxTipo.ItemIndex = 0 then
+          ParamByName('tip').AsString := 'C'
+        else
+          ParamByName('tip').AsString := 'D';
+
+        ExecSQL();
+      end;
+  except
+    MessageDlg('Erro ao incluir o lançamento no caixa!',mtWarning,[mbOk],0);
+  end;
+
+  Self.Close;
+end;
+
+procedure TfrmIncluirCaixa.BtnBuscaContaClick(Sender: TObject);
+begin
+  frmContas := TfrmContas.Create(self);
+  frmContas.telaChamando := 3;
+  frmContas.ShowModal;
+  FreeAndNil(frmContas);
+
+  if lblConta.Caption <> trim('') then
+    BtnGravar.SetFocus;
+end;
+
+procedure TfrmIncluirCaixa.edtCodContaEnter(Sender: TObject);
+begin
+  lblConta.Caption := '';
+end;
+
+procedure TfrmIncluirCaixa.edtCodContaExit(Sender: TObject);
+begin
+  if edtCodConta.Text <> trim('') then
+    begin
+      lblConta.Caption := loFuncoes.BuscaFk(edtCodConta.Text,'contas','descricao');
+
+      if lblConta.Caption = trim('') then
+        begin
+          edtCodConta.Clear;
+          BtnBuscaConta.SetFocus;
+        end
+      else
+        BtnGravar.SetFocus;
+    end;
+end;
+
+end.

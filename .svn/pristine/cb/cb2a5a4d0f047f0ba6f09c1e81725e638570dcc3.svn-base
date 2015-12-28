@@ -1,0 +1,489 @@
+object frmRelServicosRealizadosPorEquipamento: TfrmRelServicosRealizadosPorEquipamento
+  Left = 220
+  Top = 161
+  Width = 1206
+  Height = 480
+  Caption = 'frmRelServicosRealizadosPorEquipamento'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RlRptRelatorio: TRLReport
+    Left = 0
+    Top = 0
+    Width = 1123
+    Height = 794
+    AllowedBands = [btTitle, btColumnHeader, btDetail, btColumnFooter]
+    DataSource = frmSelRelServicosEquipamentos.dsRel
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    PageSetup.Orientation = poLandscape
+    ExpressionParser = RLExpressionParser1
+    BeforePrint = RlRptRelatorioBeforePrint
+    object RLBand1: TRLBand
+      Left = 38
+      Top = 113
+      Width = 1047
+      Height = 24
+      BandType = btColumnHeader
+      object RLLabel7: TRLLabel
+        Left = 8
+        Top = 0
+        Width = 31
+        Height = 16
+        Caption = 'O.S.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel8: TRLLabel
+        Left = 64
+        Top = 0
+        Width = 43
+        Height = 16
+        Caption = 'Status'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel9: TRLLabel
+        Left = 112
+        Top = 0
+        Width = 60
+        Height = 16
+        Caption = 'H. Inicial'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel10: TRLLabel
+        Left = 176
+        Top = 0
+        Width = 53
+        Height = 16
+        Caption = 'H. Final'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel11: TRLLabel
+        Left = 232
+        Top = 0
+        Width = 67
+        Height = 16
+        Caption = 'Qtd. H/KM'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel12: TRLLabel
+        Left = 312
+        Top = 0
+        Width = 75
+        Height = 16
+        Caption = 'Valor H/KM'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel13: TRLLabel
+        Left = 392
+        Top = 0
+        Width = 36
+        Height = 16
+        Caption = 'Total'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel14: TRLLabel
+        Left = 488
+        Top = 0
+        Width = 33
+        Height = 16
+        Caption = 'Data'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel15: TRLLabel
+        Left = 576
+        Top = 0
+        Width = 49
+        Height = 16
+        Caption = 'Cliente'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLDraw1: TRLDraw
+        Left = -16
+        Top = 16
+        Width = 1050
+        Height = 1
+      end
+      object RLLabel18: TRLLabel
+        Left = 940
+        Top = 0
+        Width = 39
+        Height = 16
+        Caption = 'Func.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+    object RLBand2: TRLBand
+      Left = 38
+      Top = 38
+      Width = 1047
+      Height = 75
+      BandType = btTitle
+      object RLLabel1: TRLLabel
+        Left = 160
+        Top = 16
+        Width = 392
+        Height = 19
+        Caption = 'Relat'#243'rio de Servi'#231'os Realizados por Equipamento'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel2: TRLLabel
+        Left = 585
+        Top = 5
+        Width = 53
+        Height = 18
+        Caption = 'Status:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel5: TRLLabel
+        Left = 585
+        Top = 25
+        Width = 64
+        Height = 18
+        Caption = 'Per'#237'odo:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lblPeriodoInicial: TRLLabel
+        Left = 688
+        Top = 24
+        Width = 81
+        Height = 18
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lblPeriodoFinal: TRLLabel
+        Left = 792
+        Top = 24
+        Width = 81
+        Height = 18
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel6: TRLLabel
+        Left = 774
+        Top = 24
+        Width = 12
+        Height = 18
+        Caption = #224
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lblStatus: TRLLabel
+        Left = 688
+        Top = 5
+        Width = 66
+        Height = 18
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel3: TRLLabel
+        Left = 585
+        Top = 45
+        Width = 101
+        Height = 18
+        Caption = 'Equipamento:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lblEquipamento: TRLLabel
+        Left = 688
+        Top = 45
+        Width = 345
+        Height = 18
+        AutoSize = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RlImgLogo: TRLImage
+        Left = 8
+        Top = 8
+        Width = 121
+        Height = 57
+        Stretch = True
+      end
+    end
+    object RLBand3: TRLBand
+      Left = 38
+      Top = 137
+      Width = 1047
+      Height = 16
+      object OS: TRLDBText
+        Left = 8
+        Top = 0
+        Width = 49
+        Height = 16
+        AutoSize = False
+        DataField = 'OSBLOCO'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+      end
+      object Status: TRLDBText
+        Left = 64
+        Top = 0
+        Width = 41
+        Height = 16
+        AutoSize = False
+        DataField = 'STATUS'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+      end
+      object HInicial: TRLDBText
+        Left = 112
+        Top = 0
+        Width = 57
+        Height = 16
+        AutoSize = False
+        DataField = 'HORAINICIAL'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ' #,###,##0.00'
+      end
+      object Hfinal: TRLDBText
+        Left = 176
+        Top = 0
+        Width = 49
+        Height = 16
+        AutoSize = False
+        DataField = 'HORAFINAL'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ' #,###,##0.00'
+      end
+      object QtdHoras: TRLDBText
+        Left = 232
+        Top = 0
+        Width = 65
+        Height = 16
+        AutoSize = False
+        DataField = 'QTDHORAS'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ' #,###,##0.00'
+      end
+      object ValorHora: TRLDBText
+        Left = 312
+        Top = 0
+        Width = 61
+        Height = 16
+        Alignment = taRightJustify
+        AutoSize = False
+        DataFormula = 'VALORHORA'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ',0.00'
+      end
+      object Total: TRLDBText
+        Left = 392
+        Top = 0
+        Width = 89
+        Height = 16
+        Alignment = taRightJustify
+        AutoSize = False
+        DataFormula = 'TOTAL'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ',0.00'
+      end
+      object Data: TRLDBText
+        Left = 488
+        Top = 0
+        Width = 81
+        Height = 16
+        AutoSize = False
+        DataField = 'DATACAD'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+      end
+      object CLIENTE: TRLDBText
+        Left = 576
+        Top = 0
+        Width = 361
+        Height = 16
+        AutoSize = False
+        DataField = 'NOME'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+      end
+      object RLDBText1: TRLDBText
+        Left = 940
+        Top = 0
+        Width = 101
+        Height = 16
+        AutoSize = False
+        DataField = 'FUNC'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+      end
+    end
+    object RLBand4: TRLBand
+      Left = 38
+      Top = 153
+      Width = 1047
+      Height = 104
+      BandType = btFooter
+      object RLLabel4: TRLLabel
+        Left = 256
+        Top = 79
+        Width = 127
+        Height = 16
+        Caption = 'Relat'#243'rio emitido em:'
+      end
+      object RLSystemInfo1: TRLSystemInfo
+        Left = 392
+        Top = 79
+        Width = 60
+        Height = 16
+        Info = itFullDate
+      end
+      object RLDBResult2: TRLDBResult
+        Left = 160
+        Top = 48
+        Width = 96
+        Height = 16
+        DataFormula = 'TOTAL'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ',0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Info = riSum
+        ParentFont = False
+      end
+      object RLLabel17: TRLLabel
+        Left = 8
+        Top = 48
+        Width = 147
+        Height = 16
+        Caption = 'Valor Total Produzido:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel16: TRLLabel
+        Left = 8
+        Top = 24
+        Width = 124
+        Height = 16
+        Caption = 'Total de Horas/KM:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLDBResult1: TRLDBResult
+        Left = 160
+        Top = 24
+        Width = 126
+        Height = 16
+        DataFormula = 'QTDHORAS'
+        DataSource = frmSelRelServicosEquipamentos.dsRel
+        DisplayMask = ',0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        Info = riSum
+        ParentFont = False
+      end
+    end
+  end
+  object RLExpressionParser1: TRLExpressionParser
+    Left = 560
+    Top = 288
+  end
+end

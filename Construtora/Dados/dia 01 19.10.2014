@@ -1,0 +1,691 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.6.21-log
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema construcao
+--
+
+CREATE DATABASE IF NOT EXISTS construcao;
+USE construcao;
+
+--
+-- Definition of table `audcargo`
+--
+
+DROP TABLE IF EXISTS `audcargo`;
+CREATE TABLE `audcargo` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codcargo` int(10) unsigned DEFAULT NULL,
+  `descricao` varchar(100) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audcargo_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audcargo_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audcargo`
+--
+
+/*!40000 ALTER TABLE `audcargo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audcargo` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audcnae`
+--
+
+DROP TABLE IF EXISTS `audcnae`;
+CREATE TABLE `audcnae` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codcnae` int(10) unsigned DEFAULT NULL,
+  `descricao` varchar(150) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audcnae_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audcnae_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audcnae`
+--
+
+/*!40000 ALTER TABLE `audcnae` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audcnae` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audempresa`
+--
+
+DROP TABLE IF EXISTS `audempresa`;
+CREATE TABLE `audempresa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codempresa` int(10) unsigned NOT NULL,
+  `razaosocial` varchar(150) NOT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audempresa_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audempresa_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audempresa`
+--
+
+/*!40000 ALTER TABLE `audempresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audempresa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audfonespessoa`
+--
+
+DROP TABLE IF EXISTS `audfonespessoa`;
+CREATE TABLE `audfonespessoa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codfone` int(10) unsigned DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  `fone` varchar(14) DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audfonespessoa_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audfonespessoa_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audfonespessoa`
+--
+
+/*!40000 ALTER TABLE `audfonespessoa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audfonespessoa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `auditorias`
+--
+
+DROP TABLE IF EXISTS `auditorias`;
+CREATE TABLE `auditorias` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codusuario` int(10) unsigned NOT NULL,
+  `codtela` int(10) unsigned NOT NULL,
+  `codoperacao` int(10) unsigned NOT NULL,
+  `datahora` datetime NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_auditorias_usuario` (`codusuario`),
+  KEY `FK_auditorias_tela` (`codtela`),
+  KEY `FK_auditorias_operacao` (`codoperacao`),
+  CONSTRAINT `FK_auditorias_operacao` FOREIGN KEY (`codoperacao`) REFERENCES `operacoes` (`codigo`),
+  CONSTRAINT `FK_auditorias_tela` FOREIGN KEY (`codtela`) REFERENCES `telas` (`codigo`),
+  CONSTRAINT `FK_auditorias_usuario` FOREIGN KEY (`codusuario`) REFERENCES `usuarios` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `auditorias`
+--
+
+/*!40000 ALTER TABLE `auditorias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auditorias` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audmunicipio`
+--
+
+DROP TABLE IF EXISTS `audmunicipio`;
+CREATE TABLE `audmunicipio` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codmunicipio` int(10) unsigned DEFAULT NULL,
+  `nome` varchar(100) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audmunicipio_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audmunicipio_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audmunicipio`
+--
+
+/*!40000 ALTER TABLE `audmunicipio` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audmunicipio` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audnivelacesso`
+--
+
+DROP TABLE IF EXISTS `audnivelacesso`;
+CREATE TABLE `audnivelacesso` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codnivel` int(10) unsigned DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audnivelacesso_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audnivelacesso_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audnivelacesso`
+--
+
+/*!40000 ALTER TABLE `audnivelacesso` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audnivelacesso` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audpessoa`
+--
+
+DROP TABLE IF EXISTS `audpessoa`;
+CREATE TABLE `audpessoa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codpessoa` int(10) unsigned DEFAULT NULL,
+  `razaosocial` varchar(150) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audpessoa_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audpessoa_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audpessoa`
+--
+
+/*!40000 ALTER TABLE `audpessoa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audpessoa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audregiao`
+--
+
+DROP TABLE IF EXISTS `audregiao`;
+CREATE TABLE `audregiao` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(100) DEFAULT NULL,
+  `codregiao` int(10) unsigned DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audregiao_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audregiao_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audregiao`
+--
+
+/*!40000 ALTER TABLE `audregiao` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audregiao` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audtipoendereco`
+--
+
+DROP TABLE IF EXISTS `audtipoendereco`;
+CREATE TABLE `audtipoendereco` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codtipoend` int(10) unsigned DEFAULT NULL,
+  `tipo` varchar(100) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audtipoendereco_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audtipoendereco_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audtipoendereco`
+--
+
+/*!40000 ALTER TABLE `audtipoendereco` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audtipoendereco` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audtipofonepessoa`
+--
+
+DROP TABLE IF EXISTS `audtipofonepessoa`;
+CREATE TABLE `audtipofonepessoa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codtipofone` int(10) unsigned DEFAULT NULL,
+  `descricao` varchar(70) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audtipofonepessoa_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audtipofonepessoa_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audtipofonepessoa`
+--
+
+/*!40000 ALTER TABLE `audtipofonepessoa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audtipofonepessoa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `auduf`
+--
+
+DROP TABLE IF EXISTS `auduf`;
+CREATE TABLE `auduf` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uf` varchar(50) DEFAULT NULL,
+  `coduf` int(10) unsigned DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_auduf_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_auduf_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `auduf`
+--
+
+/*!40000 ALTER TABLE `auduf` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auduf` ENABLE KEYS */;
+
+
+--
+-- Definition of table `audusuario`
+--
+
+DROP TABLE IF EXISTS `audusuario`;
+CREATE TABLE `audusuario` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codusuario` int(10) unsigned DEFAULT NULL,
+  `usuario` varchar(100) DEFAULT NULL,
+  `codauditoria` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_audusuario_auditoria` (`codauditoria`),
+  CONSTRAINT `FK_audusuario_auditoria` FOREIGN KEY (`codauditoria`) REFERENCES `auditorias` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `audusuario`
+--
+
+/*!40000 ALTER TABLE `audusuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `audusuario` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cargos`
+--
+
+DROP TABLE IF EXISTS `cargos`;
+CREATE TABLE `cargos` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(100) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cargos`
+--
+
+/*!40000 ALTER TABLE `cargos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cargos` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cnae`
+--
+
+DROP TABLE IF EXISTS `cnae`;
+CREATE TABLE `cnae` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codcnae` varchar(30) NOT NULL,
+  `descricao` varchar(150) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cnae`
+--
+
+/*!40000 ALTER TABLE `cnae` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cnae` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cnaeempresa`
+--
+
+DROP TABLE IF EXISTS `cnaeempresa`;
+CREATE TABLE `cnaeempresa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codempresa` int(10) unsigned NOT NULL,
+  `codcnae` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_cnaeempresa_empresa` (`codempresa`),
+  KEY `FK_cnaeempresa_cnae` (`codcnae`),
+  CONSTRAINT `FK_cnaeempresa_cnae` FOREIGN KEY (`codcnae`) REFERENCES `cnae` (`codigo`),
+  CONSTRAINT `FK_cnaeempresa_empresa` FOREIGN KEY (`codempresa`) REFERENCES `empresas` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cnaeempresa`
+--
+
+/*!40000 ALTER TABLE `cnaeempresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cnaeempresa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `empresas`
+--
+
+DROP TABLE IF EXISTS `empresas`;
+CREATE TABLE `empresas` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `razaosocial` varchar(150) DEFAULT NULL,
+  `fantasia` varchar(150) DEFAULT NULL,
+  `cnpj` varchar(20) DEFAULT NULL,
+  `ie` varchar(20) DEFAULT NULL,
+  `im` varchar(20) DEFAULT NULL,
+  `endereco` varchar(150) DEFAULT NULL,
+  `numero` varchar(20) DEFAULT NULL,
+  `codmunicipio` int(10) unsigned DEFAULT NULL,
+  `codtipoendereco` int(10) unsigned DEFAULT NULL,
+  `tipoempresa` int(10) unsigned DEFAULT NULL,
+  `aliquotaicm` decimal(9,2) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `empresas`
+--
+
+/*!40000 ALTER TABLE `empresas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `empresas` ENABLE KEYS */;
+
+
+--
+-- Definition of table `fonespessoa`
+--
+
+DROP TABLE IF EXISTS `fonespessoa`;
+CREATE TABLE `fonespessoa` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fone` varchar(14) NOT NULL,
+  `codtipofone` int(10) unsigned NOT NULL,
+  `codpessoa` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_fonespessoa_pessoa` (`codpessoa`),
+  KEY `FK_fonespessoa_tipo` (`codtipofone`),
+  CONSTRAINT `FK_fonespessoa_pessoa` FOREIGN KEY (`codpessoa`) REFERENCES `pessoas` (`codigo`),
+  CONSTRAINT `FK_fonespessoa_tipo` FOREIGN KEY (`codtipofone`) REFERENCES `tiposfones` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `fonespessoa`
+--
+
+/*!40000 ALTER TABLE `fonespessoa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fonespessoa` ENABLE KEYS */;
+
+
+--
+-- Definition of table `municipios`
+--
+
+DROP TABLE IF EXISTS `municipios`;
+CREATE TABLE `municipios` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `cep` varchar(10) DEFAULT NULL,
+  `cepunico` int(10) unsigned NOT NULL,
+  `coduf` int(10) unsigned NOT NULL,
+  `codibge` varchar(20) DEFAULT NULL,
+  `codmunicipio` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_municipios_uf` (`coduf`),
+  CONSTRAINT `FK_municipios_uf` FOREIGN KEY (`coduf`) REFERENCES `ufs` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `municipios`
+--
+
+/*!40000 ALTER TABLE `municipios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `municipios` ENABLE KEYS */;
+
+
+--
+-- Definition of table `niveisacesso`
+--
+
+DROP TABLE IF EXISTS `niveisacesso`;
+CREATE TABLE `niveisacesso` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `codtela` int(10) unsigned NOT NULL,
+  `codoperacao` int(10) unsigned NOT NULL,
+  `codusuario` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_niveisacesso_operacao` (`codoperacao`),
+  KEY `FK_niveisacesso_tela` (`codtela`),
+  CONSTRAINT `FK_niveisacesso_operacao` FOREIGN KEY (`codoperacao`) REFERENCES `operacoes` (`codigo`),
+  CONSTRAINT `FK_niveisacesso_tela` FOREIGN KEY (`codtela`) REFERENCES `telas` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `niveisacesso`
+--
+
+/*!40000 ALTER TABLE `niveisacesso` DISABLE KEYS */;
+/*!40000 ALTER TABLE `niveisacesso` ENABLE KEYS */;
+
+
+--
+-- Definition of table `operacoes`
+--
+
+DROP TABLE IF EXISTS `operacoes`;
+CREATE TABLE `operacoes` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(100) NOT NULL,
+  `obs` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `operacoes`
+--
+
+/*!40000 ALTER TABLE `operacoes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `operacoes` ENABLE KEYS */;
+
+
+--
+-- Definition of table `pessoas`
+--
+
+DROP TABLE IF EXISTS `pessoas`;
+CREATE TABLE `pessoas` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tipo` int(10) unsigned NOT NULL,
+  `razaosocial` varchar(150) DEFAULT NULL,
+  `fantasia` varchar(150) DEFAULT NULL,
+  `cnpj` varchar(20) DEFAULT NULL,
+  `ie` varchar(20) DEFAULT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `numero` varchar(20) DEFAULT NULL,
+  `bairro` varchar(100) DEFAULT NULL,
+  `codtipoendereco` int(10) unsigned DEFAULT NULL,
+  `codmunicipio` int(10) unsigned DEFAULT NULL,
+  `codempresa` int(10) unsigned NOT NULL,
+  `codregiao` int(10) unsigned DEFAULT NULL,
+  `website` varchar(150) DEFAULT NULL,
+  `dataabertura` date DEFAULT NULL,
+  `situacao` int(10) unsigned NOT NULL,
+  `contato` varchar(150) DEFAULT NULL,
+  `codcargo` int(10) unsigned DEFAULT NULL,
+  `dataadmissao` date DEFAULT NULL,
+  `salario` decimal(9,2) DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_pessoas_tipoendereco` (`codtipoendereco`),
+  KEY `FK_pessoas_municipio` (`codmunicipio`),
+  KEY `FK_pessoas_empresa` (`codempresa`),
+  KEY `FK_pessoas_regiao` (`codregiao`),
+  KEY `FK_pessoas_cargo` (`codcargo`),
+  CONSTRAINT `FK_pessoas_cargo` FOREIGN KEY (`codcargo`) REFERENCES `cargos` (`codigo`),
+  CONSTRAINT `FK_pessoas_empresa` FOREIGN KEY (`codempresa`) REFERENCES `empresas` (`codigo`),
+  CONSTRAINT `FK_pessoas_municipio` FOREIGN KEY (`codmunicipio`) REFERENCES `municipios` (`codigo`),
+  CONSTRAINT `FK_pessoas_regiao` FOREIGN KEY (`codregiao`) REFERENCES `regioes` (`codigo`),
+  CONSTRAINT `FK_pessoas_tipoendereco` FOREIGN KEY (`codtipoendereco`) REFERENCES `tiposendereco` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `pessoas`
+--
+
+/*!40000 ALTER TABLE `pessoas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pessoas` ENABLE KEYS */;
+
+
+--
+-- Definition of table `regioes`
+--
+
+DROP TABLE IF EXISTS `regioes`;
+CREATE TABLE `regioes` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(100) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `regioes`
+--
+
+/*!40000 ALTER TABLE `regioes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `regioes` ENABLE KEYS */;
+
+
+--
+-- Definition of table `telas`
+--
+
+DROP TABLE IF EXISTS `telas`;
+CREATE TABLE `telas` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(60) DEFAULT NULL,
+  `obs` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `telas`
+--
+
+/*!40000 ALTER TABLE `telas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `telas` ENABLE KEYS */;
+
+
+--
+-- Definition of table `tiposendereco`
+--
+
+DROP TABLE IF EXISTS `tiposendereco`;
+CREATE TABLE `tiposendereco` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(200) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tiposendereco`
+--
+
+/*!40000 ALTER TABLE `tiposendereco` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tiposendereco` ENABLE KEYS */;
+
+
+--
+-- Definition of table `tiposfones`
+--
+
+DROP TABLE IF EXISTS `tiposfones`;
+CREATE TABLE `tiposfones` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(70) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tiposfones`
+--
+
+/*!40000 ALTER TABLE `tiposfones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tiposfones` ENABLE KEYS */;
+
+
+--
+-- Definition of table `ufs`
+--
+
+DROP TABLE IF EXISTS `ufs`;
+CREATE TABLE `ufs` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sigla` char(2) NOT NULL,
+  `nome` varchar(70) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ufs`
+--
+
+/*!40000 ALTER TABLE `ufs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ufs` ENABLE KEYS */;
+
+
+--
+-- Definition of table `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios` (
+  `codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(150) DEFAULT NULL,
+  `usuario` varchar(100) DEFAULT NULL,
+  `senha` varchar(50) DEFAULT NULL,
+  `codnivelacesso` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`codigo`),
+  KEY `FK_usuarios_nivelacesso` (`codnivelacesso`),
+  CONSTRAINT `FK_usuarios_nivelacesso` FOREIGN KEY (`codnivelacesso`) REFERENCES `niveisacesso` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,176 @@
+unit unConsultaLivros;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, FMTBcd, Provider,
+  DBClient, DB, SqlExpr;
+
+type
+  TfrmConsultaLivros = class(TForm)
+    PnConsulta: TPanel;
+    PnOpcoes: TPanel;
+    PnDados: TPanel;
+    Label1: TLabel;
+    RdBtnID: TRadioButton;
+    RdBtnTitulo: TRadioButton;
+    Bevel1: TBevel;
+    Label2: TLabel;
+    edtConsulta: TEdit;
+    BtnConsultar: TBitBtn;
+    GrdLivros: TDBGrid;
+    BtnIncluir: TBitBtn;
+    BtnAlterar: TBitBtn;
+    BtnExcluir: TBitBtn;
+    BtnSair: TBitBtn;
+    qryLivros: TSQLQuery;
+    dsLivros: TDataSource;
+    cdsLivros: TClientDataSet;
+    dspLivros: TDataSetProvider;
+    BtnSelecionar: TBitBtn;
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BtnConsultarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
+    procedure BtnSelecionarClick(Sender: TObject);
+  private
+    procedure mostraLivros;
+    procedure AlimentaCampos;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frmConsultaLivros: TfrmConsultaLivros;
+
+implementation
+
+uses unDM, unCadastroLivros, unCadastroEmprestimos;
+
+{$R *.dfm}
+
+procedure TfrmConsultaLivros.BtnSairClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmConsultaLivros.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TfrmConsultaLivros.mostraLivros;
+begin
+  try
+    qryLivros.Close;
+    qryLivros.SQL.Clear;
+    qryLivros.SQL.Add('SELECT * FROM livro');
+
+    if (RdBtnID.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryLivros.SQL.Add('WHERE id_livro = :id');
+
+    if (RdBtnTitulo.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryLivros.SQL.Add('WHERE titulo LIKE :titulo');
+
+    if (RdBtnID.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryLivros.ParamByName('id').AsInteger := StrToInt(edtConsulta.Text);
+
+    if (RdBtnTitulo.Checked = true) and (edtConsulta.Text <> trim('')) then
+      qryLivros.ParamByName('titulo').AsString := '%' + edtConsulta.Text + '%';
+
+    qryLivros.Open;
+    cdsLivros.Close;
+    cdsLivros.Open;
+  except
+    MessageDlg('Erro ao mostrar os livros!',mtError,[mbOk],0);
+  end;
+end;
+
+procedure TfrmConsultaLivros.BtnConsultarClick(Sender: TObject);
+begin
+  mostraLivros;
+end;
+
+procedure TfrmConsultaLivros.FormShow(Sender: TObject);
+begin
+  mostraLivros;
+end;
+
+procedure TfrmConsultaLivros.BtnIncluirClick(Sender: TObject);
+begin
+  try
+    edtConsulta.Clear;
+    frmCadastroLivros := TfrmCadastroLivros.Create(self);
+    frmCadastroLivros.iOperacao := 1; // Inclusão
+    frmCadastroLivros.ShowModal;
+  finally
+    FreeAndNil(frmCadastroLivros);
+    mostraLivros;
+  end;
+end;
+
+procedure TfrmConsultaLivros.BtnAlterarClick(Sender: TObject);
+begin
+  try
+    edtConsulta.Clear;
+    frmCadastroLivros := TfrmCadastroLivros.Create(self);
+    AlimentaCampos;
+    frmCadastroLivros.iOperacao := 2; // Alteração
+    frmCadastroLivros.ShowModal;
+  finally
+    FreeAndNil(frmCadastroLivros);
+    mostraLivros;
+  end;
+end;
+
+procedure TfrmConsultaLivros.AlimentaCampos;
+begin
+  frmCadastroLivros.edtIDLivro.Text := cdsLivros.FieldByName('id_livro').AsString;
+  frmCadastroLivros.edtTitulo.Text  := cdsLivros.FieldByName('titulo').AsString;
+  frmCadastroLivros.edtExemplar.Text:= cdsLivros.FieldByName('exemplar').AsString;
+  frmCadastroLivros.edtAutor.Text   := cdsLivros.FieldByName('autor').AsString;
+  frmCadastroLivros.edtEditora.Text := cdsLivros.FieldByName('editora').AsString;
+  frmCadastroLivros.edtAno.Text     := cdsLivros.FieldBYName('ano').AsString;
+  frmCadastroLivros.edtAreaConhecimento.Text := cdsLivros.FieldByName('area_conhecimento').AsString;
+  frmCadastroLivros.edtLocalizacao.Text      := cdsLivros.FieldByName('localizacao').AsString;
+end;
+
+procedure TfrmConsultaLivros.BtnExcluirClick(Sender: TObject);
+begin
+  if (MessageDlg('Deseja realmente excluir o livro '+ cdsLivros.FieldByName('titulo').AsString+'?',mtConfirmation,[mbYes,mbNo],0)=mrYes) then
+    begin
+      try
+        qryLivros.Close;
+        qryLivros.SQL.Clear;
+        qryLivros.SQL.Add('DELETE FROM livro');
+        qryLivros.SQL.Add('WHERE id_livro = :id');
+        qryLivros.ParamByName('id').AsInteger := cdsLivros.FieldByName('id_livro').AsInteger;
+        qryLivros.ExecSQL();
+      except
+        MessageDlg('Não é possível excluir o livro. O mesmo já deve ter vinculo em algum empréstimo!',mtError,[mbOk],0);
+      end;
+    end;
+
+  mostraLivros;
+end;
+
+procedure TfrmConsultaLivros.BtnSelecionarClick(Sender: TObject);
+begin
+  if cdsLivros.RecordCount > 0 then
+    begin
+      frmCadastroEmprestimos.edtCodLivro.Text := cdsLivros.FieldByName('id_livro').AsString;
+      frmCadastroEmprestimos.lblLivro.Caption := cdsLivros.FieldByName('titulo').AsString;
+      frmCadastroEmprestimos.mskEmprestimo.SetFocus;
+      Self.Close;
+    end;
+end;
+
+end.

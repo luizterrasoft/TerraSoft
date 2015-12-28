@@ -1,0 +1,86 @@
+unit uFigura;
+
+interface
+
+uses
+  Graphics;
+
+type
+  TFigura = class
+
+  private
+    FoCor: TColor;
+
+  public
+    procedure Desenhar(poCanvas: TCanvas; piX, piY: integer); virtual; abstract;
+    property Cor: TColor read FoCor write FoCor;
+  end;
+
+  TQuadrado = class(TFigura)
+
+  private
+    FiLargura: integer;
+
+  public
+    procedure Desenhar(poCanvas: TCanvas; piX, piY: integer); override;
+    constructor Create(piLargura: integer); overload;
+    property Largura: integer read FiLargura write FiLargura;
+
+  end;
+
+  TRetangulo = class(TQuadrado)
+
+  private
+    FiAltura: integer;
+
+  public
+    procedure Desenhar(poCanvas: TCanvas; piX, piY: integer); override;
+    constructor Create(piAltura: integer; piLargura: integer); overload;
+    property Altura: integer read FiAltura write FiAltura;
+  end;
+
+implementation
+
+{ TQuadrado }
+
+constructor TQuadrado.Create(piLargura: integer);
+begin
+  Cor           := clBlue;
+  Largura       := piLargura;
+
+  inherited Create;
+end;
+
+procedure TQuadrado.Desenhar(poCanvas: TCanvas; piX,
+  piY: integer);
+begin
+  inherited;
+
+  poCanvas.Pen.Style := psSolid;
+  poCanvas.Pen.Color := Cor;
+  poCanvas.Brush.Style := bsSolid;
+  poCanvas.Brush.Color := Cor;
+  poCanvas.Rectangle(piX,piY,Largura,Largura);
+end;
+
+{ TRetangulo }
+
+constructor TRetangulo.Create(piAltura, piLargura: integer);
+begin
+  Altura  := piAltura;
+
+  inherited Create(piLargura);
+end;
+
+procedure TRetangulo.Desenhar(poCanvas: TCanvas; piX,
+  piY: integer);
+begin
+  inherited;
+  poCanvas.Pen.Color := Cor;
+  poCanvas.Pen.Style := psSolid;
+  poCanvas.brush.Style := bsSolid;
+  poCanvas.Brush.Color := Cor;
+  poCanvas.Rectangle(piX,piY,Largura,Altura);
+end;
+
+end.

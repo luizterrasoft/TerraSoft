@@ -1,0 +1,10 @@
+unit unConstantes;
+
+interface
+
+const
+  sNOME_ARQUIVO_INI_BD = 'CONFIGBD.INI';
+
+implementation
+
+end.
