@@ -1,6 +1,6 @@
 object frmFaturamentoManu: TfrmFaturamentoManu
-  Left = 429
-  Top = 285
+  Left = 746
+  Top = 247
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'FATURAMENTO MANUTEN'#199#195'O'

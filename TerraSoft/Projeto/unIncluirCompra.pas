@@ -72,6 +72,7 @@ type
     cdsAux: TClientDataSet;
     dspAux: TDataSetProvider;
     qryAux: TSQLQuery;
+    btnGerarFaturamento: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure edtCodFornecedorExit(Sender: TObject);
@@ -96,6 +97,7 @@ type
       Shift: TShiftState);
     procedure BtnExcluirClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnGerarFaturamentoClick(Sender: TObject);
   private
 
     loFuncoes: TFuncoes;
@@ -113,7 +115,7 @@ var
 
 implementation
 
-uses unDM, unFornecedores, unProdutos, unEquipamentos;
+uses unDM, unFornecedores, unProdutos, unEquipamentos, unVisualizarFatManu;
 
 {$R *.dfm}
 
@@ -483,6 +485,29 @@ procedure TfrmIncluirCompra.FormShow(Sender: TObject);
 begin
   mskEmissao.Text := DateToStr(Date);
   mskEntrada.Text := DateToStr(Date);
+end;
+
+procedure TfrmIncluirCompra.btnGerarFaturamentoClick(Sender: TObject);
+begin
+  if codCompra < 1 then
+    begin
+      MessageDlg('Nenhuma compra selecionada para faturar!',mtWarning,[mbOk],0);
+      Exit;
+    end;
+
+  frmFaturamentoManu := TfrmFaturamentoManu.Create(self);
+  frmFaturamentoManu.CodSubPlano   := cdsManu.FieldByName('codsubplano').AsInteger;
+  frmFaturamentoManu.CodPlano      := cdsManu.FieldByName('codplanoconta').AsInteger;
+  frmFaturamentoManu.sNotaFiscal   := cdsManu.FieldByName('numeronf').AsString;
+  frmFaturamentoManu.codFornecedor := cdsManu.FieldByName('codfornecedor').AsInteger;
+  frmFaturamentoManu.codManutencao := cdsManu.FieldByName('codigo').AsInteger;
+  frmFaturamentoManu.lblVlrTotal.Caption := loFuncoes.TrataReal(cdsManu.FieldByName('total').AsString);
+  frmFaturamentoManu.sDescricao := cdsManu.FieldByName('descricao').AsString;
+  frmFaturamentoManu.iTipo      := 1; // Manutenção
+  frmFaturamentoManu.ShowModal;
+  FreeAndNil(frmFaturamentoManu);
+
+  mostraManutencoes;
 end;
 
 end.

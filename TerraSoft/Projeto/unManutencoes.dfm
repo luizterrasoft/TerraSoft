@@ -1,6 +1,6 @@
 object frmManutencoes: TfrmManutencoes
-  Left = 351
-  Top = 125
+  Left = 459
+  Top = 75
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'MANUTEN'#199#213'ES/DESPESAS'
@@ -88,7 +88,7 @@ object frmManutencoes: TfrmManutencoes
       Width = 425
       Height = 180
       Enabled = False
-      TabOrder = 0
+      TabOrder = 1
       object Produto: TLabel
         Left = 8
         Top = 7
@@ -198,7 +198,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 3
+        TabOrder = 5
         Text = '1'
       end
       object edtCusto: TEdit
@@ -209,7 +209,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 4
+        TabOrder = 6
         Text = '0,00'
         OnExit = edtCustoExit
       end
@@ -221,7 +221,7 @@ object frmManutencoes: TfrmManutencoes
         Caption = 'Baixar do Estoque'
         Checked = True
         State = cbChecked
-        TabOrder = 6
+        TabOrder = 3
       end
       object BtnIncluir: TBitBtn
         Left = 360
@@ -229,7 +229,7 @@ object frmManutencoes: TfrmManutencoes
         Width = 59
         Height = 21
         Caption = 'Incluir'
-        TabOrder = 7
+        TabOrder = 4
         OnClick = BtnIncluirClick
       end
       object BtnExcluir: TBitBtn
@@ -339,7 +339,7 @@ object frmManutencoes: TfrmManutencoes
         EditMask = '99/99/9999;1;_'
         MaxLength = 10
         ParentCtl3D = False
-        TabOrder = 5
+        TabOrder = 7
         Text = '  /  /    '
       end
     end
@@ -348,7 +348,7 @@ object frmManutencoes: TfrmManutencoes
       Top = 39
       Width = 425
       Height = 235
-      TabOrder = 1
+      TabOrder = 0
       object Label1: TLabel
         Left = 10
         Top = 3
@@ -508,7 +508,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 3
+        TabOrder = 5
         OnEnter = edtCodPlanoContaEnter
         OnExit = edtCodPlanoContaExit
       end
@@ -521,7 +521,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 2
+        TabOrder = 4
         OnEnter = edtCodFornecedorEnter
         OnExit = edtCodFornecedorExit
       end
@@ -533,14 +533,14 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 4
+        TabOrder = 13
       end
       object BtnBuscaFornecedor: TBitBtn
         Left = 81
         Top = 51
         Width = 25
         Height = 19
-        TabOrder = 5
+        TabOrder = 3
         OnClick = BtnBuscaFornecedorClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
@@ -622,7 +622,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 7
+        TabOrder = 12
         Text = '0,00'
         Visible = False
         OnExit = edtValorServicoExit
@@ -645,7 +645,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         Ctl3D = False
         ParentCtl3D = False
-        TabOrder = 11
+        TabOrder = 7
         OnExit = edtCodSubPlanoExit
       end
       object BtnBuscaSubPlano: TBitBtn
@@ -653,7 +653,7 @@ object frmManutencoes: TfrmManutencoes
         Top = 117
         Width = 25
         Height = 19
-        TabOrder = 12
+        TabOrder = 8
         OnClick = BtnBuscaSubPlanoClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
@@ -692,7 +692,7 @@ object frmManutencoes: TfrmManutencoes
         Color = 13565951
         ItemHeight = 13
         ItemIndex = 1
-        TabOrder = 13
+        TabOrder = 2
         Text = 'GERAL'
         Items.Strings = (
           ''
@@ -711,7 +711,7 @@ object frmManutencoes: TfrmManutencoes
         Ctl3D = False
         MaxLength = 10
         ParentCtl3D = False
-        TabOrder = 8
+        TabOrder = 11
       end
     end
   end

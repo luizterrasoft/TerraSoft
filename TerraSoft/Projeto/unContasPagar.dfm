@@ -1,6 +1,6 @@
 object frmContasPagar: TfrmContasPagar
-  Left = 293
-  Top = 239
+  Left = 305
+  Top = 97
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'CONTAS A PAGAR'
@@ -86,7 +86,7 @@ object frmContasPagar: TfrmContasPagar
       Height = 17
       Caption = 'N'#227'o Quitadas'
       Checked = True
-      TabOrder = 0
+      TabOrder = 1
       TabStop = True
       OnClick = RdBtnNaoQuitadasClick
     end
@@ -96,7 +96,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 65
       Height = 17
       Caption = 'Vencidas'
-      TabOrder = 1
+      TabOrder = 5
       OnClick = RdBtnVencidasClick
     end
     object RdBtnQuitadas: TRadioButton
@@ -105,7 +105,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 65
       Height = 17
       Caption = 'Quitadas'
-      TabOrder = 2
+      TabOrder = 8
       OnClick = RdBtnQuitadasClick
     end
     object RdBtnTodas: TRadioButton
@@ -114,7 +114,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 49
       Height = 17
       Caption = 'Todas'
-      TabOrder = 3
+      TabOrder = 11
       OnClick = RdBtnTodasClick
     end
     object edtCodFornecedor: TEdit
@@ -126,7 +126,7 @@ object frmContasPagar: TfrmContasPagar
       Color = 13565951
       Ctl3D = False
       ParentCtl3D = False
-      TabOrder = 4
+      TabOrder = 2
       OnEnter = edtCodFornecedorEnter
       OnExit = edtCodFornecedorExit
     end
@@ -135,7 +135,7 @@ object frmContasPagar: TfrmContasPagar
       Top = 16
       Width = 26
       Height = 19
-      TabOrder = 5
+      TabOrder = 3
       OnClick = BtnBuscaFornClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -175,7 +175,7 @@ object frmContasPagar: TfrmContasPagar
       EditMask = '99/99/9999;1;_'
       MaxLength = 10
       ParentCtl3D = False
-      TabOrder = 6
+      TabOrder = 9
       Text = '01/01/2000'
     end
     object mskFInal: TMaskEdit
@@ -188,7 +188,7 @@ object frmContasPagar: TfrmContasPagar
       EditMask = '99/99/9999;1;_'
       MaxLength = 10
       ParentCtl3D = False
-      TabOrder = 7
+      TabOrder = 10
       Text = '01/01/2050'
     end
     object BtnConsultar: TBitBtn
@@ -197,7 +197,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 82
       Height = 27
       Caption = 'CONSULTAR'
-      TabOrder = 8
+      TabOrder = 0
       OnClick = BtnConsultarClick
     end
     object BtnRelatorio: TBitBtn
@@ -206,7 +206,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 82
       Height = 28
       Caption = 'RELAT'#211'RIO'
-      TabOrder = 9
+      TabOrder = 6
       OnClick = BtnRelatorioClick
     end
     object ChBxDataOriginal: TCheckBox
@@ -217,7 +217,7 @@ object frmContasPagar: TfrmContasPagar
       Caption = 'Data Original'
       Checked = True
       State = cbChecked
-      TabOrder = 10
+      TabOrder = 4
     end
     object ChBxDataOperacao: TCheckBox
       Left = 136
@@ -225,7 +225,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 97
       Height = 17
       Caption = 'Data Opera'#231#227'o'
-      TabOrder = 11
+      TabOrder = 7
     end
   end
   object PnDados: TPanel
@@ -376,7 +376,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 69
       Height = 28
       Caption = 'Incluir'
-      TabOrder = 0
+      TabOrder = 3
       OnClick = BtnIncluirClick
     end
     object BtnAlterar: TBitBtn
@@ -385,7 +385,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 67
       Height = 28
       Caption = 'Alterar'
-      TabOrder = 1
+      TabOrder = 4
       OnClick = BtnAlterarClick
     end
     object BtnQuitar: TBitBtn
@@ -394,7 +394,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 65
       Height = 28
       Caption = 'Quitar '#218'nica'
-      TabOrder = 2
+      TabOrder = 6
       OnClick = BtnQuitarClick
     end
     object BtnHistorico: TBitBtn
@@ -403,7 +403,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 57
       Height = 28
       Caption = 'Hist'#243'rico'
-      TabOrder = 3
+      TabOrder = 8
       OnClick = BtnHistoricoClick
     end
     object BtnRecibo: TBitBtn
@@ -412,7 +412,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 62
       Height = 28
       Caption = 'Recibo'
-      TabOrder = 4
+      TabOrder = 9
       OnClick = BtnReciboClick
     end
     object BtnSair: TBitBtn
@@ -421,7 +421,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 69
       Height = 22
       Caption = 'Sair - ESC'
-      TabOrder = 5
+      TabOrder = 2
       OnClick = BtnSairClick
     end
     object BtnMarcar: TBitBtn
@@ -431,7 +431,7 @@ object frmContasPagar: TfrmContasPagar
       Height = 20
       Hint = 'Clique aqui para marcar a conta selecionada a ser renegociada.'
       Caption = 'Marcar'
-      TabOrder = 6
+      TabOrder = 1
       OnClick = BtnMarcarClick
     end
     object BtnDesmarcar: TBitBtn
@@ -443,7 +443,7 @@ object frmContasPagar: TfrmContasPagar
         'Clique aqui para remover a conta marcada que n'#227'o deseja mais ren' +
         'egociar.'
       Caption = 'Desmarcar'
-      TabOrder = 7
+      TabOrder = 11
       OnClick = BtnDesmarcarClick
     end
     object BtnRenegociar: TBitBtn
@@ -453,7 +453,7 @@ object frmContasPagar: TfrmContasPagar
       Height = 25
       Hint = 'Marque as contas que deseja renegociar e depois clique aqui!'
       Caption = 'Renegociar'
-      TabOrder = 8
+      TabOrder = 0
       OnClick = BtnRenegociarClick
     end
     object BtnQuitarMarcadas: TBitBtn
@@ -462,7 +462,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 89
       Height = 28
       Caption = 'Quitar Marcadas'
-      TabOrder = 9
+      TabOrder = 7
       OnClick = BtnQuitarMarcadasClick
     end
     object BtnExcluir: TBitBtn
@@ -471,7 +471,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 67
       Height = 28
       Caption = 'Excluir'
-      TabOrder = 10
+      TabOrder = 5
       OnClick = BtnExcluirClick
     end
     object BtnOrigem: TBitBtn
@@ -480,7 +480,7 @@ object frmContasPagar: TfrmContasPagar
       Width = 75
       Height = 28
       Caption = 'Origem'
-      TabOrder = 11
+      TabOrder = 10
       OnClick = BtnOrigemClick
     end
   end

@@ -352,6 +352,7 @@ begin
   frmFaturamentoManu.codManutencao := qryManutencoes.FieldByName('codigo').AsInteger;
   frmFaturamentoManu.lblVlrTotal.Caption := lblTotalManutencao.Caption;
   frmFaturamentoManu.sDescricao := edtDescricao.Text;
+  frmFaturamentoManu.iTipo := 1; // manutenção
   frmFaturamentoManu.ShowModal;
   FreeAndNil(frmFaturamentoManu);
 end;

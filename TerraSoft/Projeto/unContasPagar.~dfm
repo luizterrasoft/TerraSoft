@@ -1,6 +1,6 @@
 object frmContasPagar: TfrmContasPagar
-  Left = 281
-  Top = 345
+  Left = 293
+  Top = 239
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'CONTAS A PAGAR'

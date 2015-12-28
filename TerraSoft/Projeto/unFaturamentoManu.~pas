@@ -189,7 +189,7 @@ begin
             Add('INSERT INTO contaspagar (lancamento,vencimento,valor,codfornecedor,codmanutencao,');
             Add('status,descricao,numeroparcela,numeronf,codsubplanoconta');
 
-            if iTipo = 2 then
+            if iTipo = 2 then // abastecimento
               Add(',tipo');
 
             if frmPrincipal.iCodUsuario > 0 then
@@ -313,7 +313,7 @@ begin
       Add('SELECT * FROM contaspagar WHERE codmanuteNcao = :manu');
 
       if iTipo = 2 then
-        Add('AND tipo = :tipo;)
+        Add('AND tipo = :tipo');
 
       ParamByName('manu').AsInteger := codManutencao;
 

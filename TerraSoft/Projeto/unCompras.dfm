@@ -54,8 +54,9 @@ object frmCompras: TfrmCompras
     object lblFornecedor: TLabel
       Left = 376
       Top = 24
-      Width = 6
+      Width = 209
       Height = 20
+      AutoSize = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
@@ -92,7 +93,7 @@ object frmCompras: TfrmCompras
       EditMask = '99/99/9999;1;_'
       MaxLength = 10
       ParentCtl3D = False
-      TabOrder = 0
+      TabOrder = 1
       Text = '  /  /    '
     end
     object mskFinal: TMaskEdit
@@ -105,7 +106,7 @@ object frmCompras: TfrmCompras
       EditMask = '99/99/9999;1;_'
       MaxLength = 10
       ParentCtl3D = False
-      TabOrder = 1
+      TabOrder = 2
       Text = '  /  /    '
     end
     object edtCodFornecedor: TEdit
@@ -116,7 +117,7 @@ object frmCompras: TfrmCompras
       Color = 13565951
       Ctl3D = False
       ParentCtl3D = False
-      TabOrder = 2
+      TabOrder = 4
       OnEnter = edtCodFornecedorEnter
       OnExit = edtCodFornecedorExit
     end
@@ -125,7 +126,7 @@ object frmCompras: TfrmCompras
       Top = 24
       Width = 25
       Height = 21
-      TabOrder = 3
+      TabOrder = 5
       OnClick = BtnBuscaFornecedorClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -161,7 +162,7 @@ object frmCompras: TfrmCompras
       Width = 83
       Height = 49
       Caption = 'CONSULTAR'
-      TabOrder = 4
+      TabOrder = 0
       OnClick = BtnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -200,7 +201,7 @@ object frmCompras: TfrmCompras
       Color = 13565951
       Ctl3D = False
       ParentCtl3D = False
-      TabOrder = 5
+      TabOrder = 3
     end
   end
   object PnOpcoes: TPanel
@@ -210,13 +211,13 @@ object frmCompras: TfrmCompras
     Height = 41
     Align = alBottom
     Color = clMoneyGreen
-    TabOrder = 1
+    TabOrder = 2
     object BtnLancar: TBitBtn
       Left = 8
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Lan'#231'ar'
+      Caption = '&Lan'#231'ar'
       TabOrder = 0
       OnClick = BtnLancarClick
     end
@@ -225,7 +226,7 @@ object frmCompras: TfrmCompras
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Alterar'
+      Caption = '&Alterar'
       TabOrder = 1
     end
     object BtnExcluir: TBitBtn
@@ -233,7 +234,7 @@ object frmCompras: TfrmCompras
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Excluir'
+      Caption = '&Excluir'
       TabOrder = 2
     end
     object BtnVisualizar: TBitBtn
@@ -241,7 +242,7 @@ object frmCompras: TfrmCompras
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Visualizar'
+      Caption = '&Visualizar'
       TabOrder = 3
     end
     object BtnRelatorios: TBitBtn
@@ -249,7 +250,7 @@ object frmCompras: TfrmCompras
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Relat'#243'rios'
+      Caption = '&Relat'#243'rios'
       TabOrder = 4
     end
     object BtnSair: TBitBtn
@@ -268,7 +269,7 @@ object frmCompras: TfrmCompras
     Width = 683
     Height = 402
     Align = alClient
-    TabOrder = 2
+    TabOrder = 1
     object GrdCompras: TDBGrid
       Left = 1
       Top = 1
