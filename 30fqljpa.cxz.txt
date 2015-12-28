@@ -1,0 +1,72 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/README.txt
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/conf/authz
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/conf/hooks-env.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/conf/passwd
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/conf/svnserve.conf
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/current
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/format
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/fs-type
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/fsfs.conf
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/min-unpacked-rev
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/revprops/0/0
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/revs/0/0
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/txn-current
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/txn-current-lock
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/uuid
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/db/write-lock
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/format
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/post-commit.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/post-lock.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/post-revprop-change.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/post-unlock.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/pre-commit.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/pre-lock.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/pre-revprop-change.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/pre-unlock.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/hooks/start-commit.tmpl
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/locks/db-logs.lock
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/locks/db.lock
+#	deleted:     terraplenagemla --username luizeng19@gmail.com/svn.ico
+#	modified:   TerraSoft/Projeto/unIncluirCompra.dfm
+#	modified:   TerraSoft/Projeto/unIncluirCompra.pas
+#	modified:   TerraSoft/Projeto/unIncluirCompra.~dfm
+#	deleted:    TerraSoft/TerraSoft.rar
+#	deleted:    TerraSoft/firebird.log
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/README.txt
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/conf/authz
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/conf/hooks-env.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/conf/passwd
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/conf/svnserve.conf
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/current
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/format
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/fs-type
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/fsfs.conf
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/min-unpacked-rev
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/revprops/0/0
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/revs/0/0
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/txn-current
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/txn-current-lock
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/uuid
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/db/write-lock
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/format
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/post-commit.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/post-lock.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/post-revprop-change.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/post-unlock.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/pre-commit.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/pre-lock.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/pre-revprop-change.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/pre-unlock.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/hooks/start-commit.tmpl
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/locks/db-logs.lock
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/locks/db.lock
+#	deleted:    terraplenagemla --username luizeng19@gmail.com/svn.ico
+#
+

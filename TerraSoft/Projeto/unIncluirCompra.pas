@@ -454,6 +454,9 @@ procedure TfrmIncluirCompra.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if Key = VK_ESCAPE then
     Self.Close;
+
+  if Key = VK_F5 then
+    BtnConfirmarClick(self);
 end;
 
 procedure TfrmIncluirCompra.BtnExcluirClick(Sender: TObject);

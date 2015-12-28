@@ -1,6 +1,6 @@
 object frmIncluirCompra: TfrmIncluirCompra
-  Left = 273
-  Top = 164
+  Left = 257
+  Top = 67
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'COMPRA'

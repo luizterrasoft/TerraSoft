@@ -209,7 +209,7 @@ object frmIncluirCompra: TfrmIncluirCompra
       Width = 97
       Height = 41
       Caption = 'CONFIRMAR'
-      TabOrder = 7
+      TabOrder = 8
       OnClick = BtnConfirmarClick
     end
     object edtValorProdutos: TEdit
@@ -226,7 +226,7 @@ object frmIncluirCompra: TfrmIncluirCompra
       Font.Style = [fsBold]
       ParentCtl3D = False
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       OnExit = edtValorProdutosExit
     end
   end
@@ -351,7 +351,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           Height = 19
           Ctl3D = False
           ParentCtl3D = False
-          TabOrder = 0
+          TabOrder = 2
           OnEnter = edtCodProdutoEnter
           OnExit = edtCodProdutoExit
         end
@@ -360,7 +360,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           Top = 23
           Width = 25
           Height = 21
-          TabOrder = 2
+          TabOrder = 0
           OnClick = BtnBuscaProdutoClick
           Glyph.Data = {
             36030000424D3603000000000000360000002800000010000000100000000100
@@ -439,7 +439,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           Height = 19
           Ctl3D = False
           ParentCtl3D = False
-          TabOrder = 8
+          TabOrder = 10
           OnEnter = edtCodEquipamentoEnter
           OnExit = edtCodEquipamentoExit
         end
@@ -569,7 +569,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           CharCase = ecUpperCase
           Ctl3D = False
           ParentCtl3D = False
-          TabOrder = 1
+          TabOrder = 3
         end
         object BtnIncluirItem: TBitBtn
           Left = 632
@@ -577,7 +577,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           Width = 81
           Height = 33
           Caption = 'Incluir Item'
-          TabOrder = 10
+          TabOrder = 8
           OnClick = BtnIncluirItemClick
         end
         object CbxTipo: TComboBox
@@ -590,7 +590,7 @@ object frmIncluirCompra: TfrmIncluirCompra
           ItemHeight = 13
           ItemIndex = 0
           ParentCtl3D = False
-          TabOrder = 3
+          TabOrder = 1
           Text = 'PRODUTO'
           Items.Strings = (
             'PRODUTO'
@@ -616,7 +616,7 @@ object frmIncluirCompra: TfrmIncluirCompra
       Top = 13
       Width = 91
       Height = 25
-      Caption = 'Concluir'
+      Caption = 'Concluir - F5'
       TabOrder = 0
       OnClick = BtnConcluirClick
     end
