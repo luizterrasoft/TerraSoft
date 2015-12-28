@@ -496,7 +496,7 @@ begin
     end;
 
   frmFaturamentoManu := TfrmFaturamentoManu.Create(self);
-  frmFaturamentoManu.CodSubPlano   := cdsManu.FieldByName('codsubplano').AsInteger;
+  //frmFaturamentoManu.CodSubPlano   := cdsManu.FieldByName('codsubplano').AsInteger;
   frmFaturamentoManu.CodPlano      := cdsManu.FieldByName('codplanoconta').AsInteger;
   frmFaturamentoManu.sNotaFiscal   := cdsManu.FieldByName('numeronf').AsString;
   frmFaturamentoManu.codFornecedor := cdsManu.FieldByName('codfornecedor').AsInteger;

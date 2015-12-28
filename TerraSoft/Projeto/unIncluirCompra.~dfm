@@ -1,6 +1,6 @@
 object frmIncluirCompra: TfrmIncluirCompra
-  Left = 257
-  Top = 67
+  Left = 258
+  Top = 125
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'COMPRA'
@@ -244,7 +244,7 @@ object frmIncluirCompra: TfrmIncluirCompra
       Top = 8
       Width = 745
       Height = 401
-      ActivePage = TbShtItens
+      ActivePage = TbShtFaturamento
       TabOrder = 0
       object TbShtItens: TTabSheet
         Caption = 'Itens da Compra'
@@ -600,6 +600,15 @@ object frmIncluirCompra: TfrmIncluirCompra
       object TbShtFaturamento: TTabSheet
         Caption = 'Faturamento'
         ImageIndex = 1
+        object btnGerarFaturamento: TBitBtn
+          Left = 8
+          Top = 8
+          Width = 121
+          Height = 25
+          Caption = 'Gerar Faturamento'
+          TabOrder = 0
+          OnClick = btnGerarFaturamentoClick
+        end
       end
     end
   end
